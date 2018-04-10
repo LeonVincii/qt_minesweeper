@@ -21,6 +21,7 @@ public:
     /* ****************************************************************************************
      * Accessors & Mutators
      * ****************************************************************************************/
+    static MineZone*    instance(int dimension);
     int                 dimension()     const   { return m_dimension; }
     const MineBlockArr* mineBlocks()    const   { return m_mine_blocks; }
 
@@ -28,8 +29,9 @@ private:
     /* ****************************************************************************************
      * Attributes
      * ****************************************************************************************/
-    int             m_dimension;
-    MineBlockArr*   m_mine_blocks;
+    static MineZone*    m_instance;
+    int                 m_dimension;
+    MineBlockArr*       m_mine_blocks;
 
 signals:
 
