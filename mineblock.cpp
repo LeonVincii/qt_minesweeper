@@ -1,13 +1,11 @@
 #include "mineblock.h"
 
 MineBlock::MineBlock(QObject *parent, int id, int zone_dimen) :
-    QObject(parent),
-    m_id(id),
-    m_is_mine(false),
-    m_value(0)
-{
-    MineBlock::setNeighbors(zone_dimen);
-}
+    QObject     (parent),
+    m_id        (id),
+    m_is_mine   (false),
+    m_value     (0)
+{}
 
 void MineBlock::setNeighbors(MineBlock* top_left,
                              MineBlock* top,
@@ -43,9 +41,10 @@ void MineBlock::setValue()
     int btm_left_val    = (m_btm_left_block == NULL)    ? 0 : m_btm_left_block->isMine();
     int btm_val         = (m_btm_block == NULL)         ? 0 : m_btm_block->isMine();
     int btm_right_val   = (m_btm_right_block == NULL)   ? 0 : m_btm_right_block->isMine();
-    m_value = top_left_val + top_val + top_right_val +
-            left_val + right_val +
-            btm_left_val + btm_val + btm_right_val;
+
+    m_value     =   top_left_val + top_val + top_right_val +
+                    left_val + right_val +
+                    btm_left_val + btm_val + btm_right_val;
 }
 
 
