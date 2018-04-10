@@ -1,6 +1,6 @@
 #include "mineblock.h"
 
-MineBlock::MineBlock(QObject *parent, int id, int zone_dimen) :
+MineBlock::MineBlock(QObject *parent, int id) :
     QObject     (parent),
     m_id        (id),
     m_is_mine   (false),

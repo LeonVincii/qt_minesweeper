@@ -14,10 +14,10 @@ class MineZone : public QObject
 
 public:
 
-    explicit MineZone(QObject *parent = nullptr, int dimension);
+    explicit MineZone(QObject *parent = nullptr, int dimension = 1);
 
     int                 dimension()     const   { return m_dimension; }
-    const MineBlockArr  &mineBlocks()   const   { return m_mine_blocks; }
+    const MineBlockArr* mineBlocks()   const   { return m_mine_blocks; }
 
 private:
 

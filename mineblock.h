@@ -9,7 +9,7 @@ class MineBlock : public QObject
 
 public:
 
-    explicit MineBlock(QObject *parent = nullptr, int id);
+    explicit MineBlock(QObject *parent = nullptr, int id = 0);
 
     int     id()        { return m_id; }
     bool    isMine()    { return m_is_mine; }
