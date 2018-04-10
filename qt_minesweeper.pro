@@ -27,12 +27,14 @@ SOURCES += \
         main.cpp \
         mainwindow.cpp \
         mineblock.cpp \
-        minezone.cpp
+        minezone.cpp \
+        engine.cpp
 
 HEADERS += \
         mainwindow.h \
         mineblock.h \
-        minezone.h
+        minezone.h \
+        engine.h
 
 FORMS += \
         mainwindow.ui

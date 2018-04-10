@@ -13,14 +13,21 @@ class MineZone : public QObject
     typedef QVector<MineBlock*> MineBlockArr;
 
 public:
-
+    /* ****************************************************************************************
+     * Constructor
+     * ****************************************************************************************/
     explicit MineZone(QObject *parent = nullptr, int dimension = 1);
 
+    /* ****************************************************************************************
+     * Accessors & Mutators
+     * ****************************************************************************************/
     int                 dimension()     const   { return m_dimension; }
-    const MineBlockArr* mineBlocks()   const   { return m_mine_blocks; }
+    const MineBlockArr* mineBlocks()    const   { return m_mine_blocks; }
 
 private:
-
+    /* ****************************************************************************************
+     * Attributes
+     * ****************************************************************************************/
     int             m_dimension;
     MineBlockArr*   m_mine_blocks;
 
