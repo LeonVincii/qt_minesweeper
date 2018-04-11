@@ -6,10 +6,11 @@
 Engine* Engine::m_instance = nullptr;
 
 Engine::Engine(QObject *parent) : QObject(parent)
+{}
+
+Engine::~Engine()
 {
-    qDebug(">> Setting game difficulty to EASY (default)");
-    Engine::setDifficulty(EASY);
-    qDebug() << ">> Number of mines: " << m_current_difficulty.num_of_mines;
+    delete m_minezone;
 }
 
 Engine* Engine::instance()
@@ -20,33 +21,49 @@ Engine* Engine::instance()
     return m_instance;
 }
 
-void Engine::setDifficulty(const Difficulty& difficulty)
+void Engine::on()
 {
-    m_current_difficulty = difficulty;
+    m_minezone = MineZone::instance(&EASY);
+    std::string cmd;
+
+    std::cout << "ENGINE >> Engine is on" << std::endl;
+
+    while (true) {
+        std::cout << "ENGINE $$ (start | showdiff | setdiff | quit) ";
+        std::cin >> cmd;
+
+        if (!cmd.compare("start")) Engine::startGame();
+        else if (!cmd.compare("setdiff")) {
+            std::cout << "ENGINE $$ (easy | normal | hard) ";
+            std::string diff;
+            std::cin >> diff;
+            if      (!diff.compare("easy"))   m_minezone->setDifficulty(&EASY);
+            else if (!diff.compare("normal")) m_minezone->setDifficulty(&NORMAL);
+            else if (!diff.compare("hard"))   m_minezone->setDifficulty(&HARD);
+            else    std::cout << "ENGINE >> Command not recognized" << std::endl;
+        }
+        else if (!cmd.compare("showdiff")) m_minezone->displayDifficulty();
+        else if (!cmd.compare("quit")) break;
+        else std::cout << "ENGINE >> Command not recognized" << std::endl;
+    }
 }
 
-void Engine::start()
+void Engine::off()
 {
-    std::cout << ">> Starting game with difficulty: "
-              << m_current_difficulty.difficulty << std::endl;
+    Engine::~Engine();
+}
 
-    // start timer
-    std::cout << ">> Starting timer" << std::endl;
-
-    // initialise number of mine
-    std::cout << ">> Remaining mines: " << m_current_difficulty.num_of_mines << std::endl;
-
-    // initialise MineZone
-    std::cout << ">> Initializing mine zone" << std::endl;
-    m_minezone = MineZone::instance(m_current_difficulty.dimension);
+void Engine::startGame()
+{
+    std::cout << "ENGINE >> Starting game" << std::endl;
 }
 
 void Engine::gameOver()
 {
-
+    std::cout << "ENGINE >> Game over" << std::endl;
 }
 
 void Engine::restart()
 {
-
+    std::cout << "ENGINE >> Restarting game" << std::endl;
 }

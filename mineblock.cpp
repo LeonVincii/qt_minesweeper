@@ -7,6 +7,9 @@ MineBlock::MineBlock(QObject *parent, int id) :
     m_value     (0)
 {}
 
+MineBlock::~MineBlock()
+{}
+
 void MineBlock::setNeighbors(MineBlock* top_left,
                              MineBlock* top,
                              MineBlock* top_right,

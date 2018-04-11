@@ -4,6 +4,17 @@
 #include <QObject>
 #include <QVector>
 
+struct Difficulty {
+    std::string difficulty;
+    int         height;
+    int         width;
+    int         num_of_mines;
+};
+
+const Difficulty EASY   = { "easy"  ,  9,  9, 10 };
+const Difficulty NORMAL = { "normal", 16, 16, 40 };
+const Difficulty HARD   = { "hard"  , 16, 30, 99 };
+
 class MineBlock;
 
 class MineZone : public QObject
@@ -14,24 +25,37 @@ class MineZone : public QObject
 
 public:
     /* ****************************************************************************************
-     * Constructor
+     * Constructor & Destructor
      * ****************************************************************************************/
-    explicit MineZone(QObject *parent = nullptr, int dimension = 1);
+    explicit MineZone(QObject *parent = nullptr, const Difficulty* difficulty = &EASY);
+    ~MineZone();
 
     /* ****************************************************************************************
      * Accessors & Mutators
      * ****************************************************************************************/
-    static MineZone*    instance(int dimension);
-    int                 dimension()     const   { return m_dimension; }
-    const MineBlockArr* mineBlocks()    const   { return m_mine_blocks; }
+    static MineZone*    instance    (const Difficulty* difficulty);
+    const Difficulty&   difficulty  ()    const   { return *m_difficulty; }
+    const MineBlockArr* mineBlocks  ()    const   { return m_mine_blocks; }
+
+    /* ****************************************************************************************
+     * Public Functions
+     * ****************************************************************************************/
+    void setDifficulty      (const Difficulty* difficulty);
+    void displayDifficulty  ();
+//    void initMines();
 
 private:
     /* ****************************************************************************************
      * Attributes
      * ****************************************************************************************/
     static MineZone*    m_instance;
-    int                 m_dimension;
+    const Difficulty*   m_difficulty;
     MineBlockArr*       m_mine_blocks;
+
+    /* ****************************************************************************************
+     * Member Functions
+     * ****************************************************************************************/
+    ;
 
 signals:
 

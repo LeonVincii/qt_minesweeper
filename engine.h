@@ -4,15 +4,7 @@
 #include <QObject>
 #include <QDebug>
 
-struct Difficulty {
-    std::string difficulty;
-    int     dimension;
-    int     num_of_mines;
-};
-
-const Difficulty EASY   = { "easy"  ,    9, 10 };
-const Difficulty NORMAL = { "normal",   16, 40 };
-const Difficulty HARD   = { "hard"  ,   22, 99 };
+struct Difficulty;
 
 class MineZone;
 
@@ -22,36 +14,36 @@ class Engine : public QObject
 
 public:
     /* ****************************************************************************************
-     * Constructor
+     * Constructor & Destructor
      * ****************************************************************************************/
     explicit Engine(QObject *parent = nullptr);
+    ~Engine();
 
     /* ****************************************************************************************
      * Accessors & Mutators
      * ****************************************************************************************/
     static Engine*      instance();
-    const Difficulty&   difficulty() const { return m_current_difficulty; }
-    void                setDifficulty(const Difficulty& difficulty);
 
     /* ****************************************************************************************
      * Public Functions
      * ****************************************************************************************/
-    void start      ();
-    void gameOver   ();
-    void restart    ();
+    void on         ();
+    void off        ();
 
 private:
     /* ****************************************************************************************
      * Attributes
      * ****************************************************************************************/
     static Engine*  m_instance;
-    Difficulty      m_current_difficulty;
-    const MineZone* m_minezone;
+    MineZone* m_minezone;
 
     /* ****************************************************************************************
      * Member Functions
      * ****************************************************************************************/
     void initMineZone(int dimension);
+    void startGame  ();
+    void gameOver   ();
+    void restart    ();
 
 signals:
 

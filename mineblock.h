@@ -9,9 +9,10 @@ class MineBlock : public QObject
 
 public:
     /* ****************************************************************************************
-     * Constructor
+     * Constructor & Destructor
      * ****************************************************************************************/
     explicit MineBlock(QObject *parent = nullptr, int id = 0);
+    ~MineBlock();
 
     /* ****************************************************************************************
      * Accessors & Mutators
