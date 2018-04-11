@@ -21,6 +21,7 @@ MineZone::MineZone(QObject *parent, const Difficulty* difficulty) :
 
 MineZone::~MineZone()
 {
+    for (MineBlock* mb : *m_mine_blocks) delete mb;
     delete m_mine_blocks;
 }
 
