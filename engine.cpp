@@ -42,7 +42,8 @@ void Engine::on()
             else if (!diff.compare("hard"))   m_minezone->setDifficulty(&HARD);
             else    std::cout << "ENGINE >> Command not recognized" << std::endl;
         }
-        else if (!cmd.compare("showdiff")) m_minezone->displayDifficulty();
+        else if (!cmd.compare("showdiff"))    m_minezone->displayDifficulty();
+        else if (!cmd.compare("cheat"))       m_minezone->dev_showMines();
         else if (!cmd.compare("quit")) break;
         else std::cout << "ENGINE >> Command not recognized" << std::endl;
     }
@@ -56,6 +57,7 @@ void Engine::off()
 void Engine::startGame()
 {
     std::cout << "ENGINE >> Starting game" << std::endl;
+    m_minezone->initMines();
 }
 
 void Engine::gameOver()

@@ -42,7 +42,8 @@ public:
      * ****************************************************************************************/
     void setDifficulty      (const Difficulty* difficulty);
     void displayDifficulty  ();
-//    void initMines();
+    void initMines          ();
+    void dev_showMines      ();
 
 private:
     /* ****************************************************************************************

@@ -1,6 +1,7 @@
 #include "minezone.h"
 #include "mineblock.h"
 
+#include <cstdlib>
 #include <iostream>
 
 MineZone* MineZone::m_instance = nullptr;
@@ -36,6 +37,8 @@ MineZone* MineZone::instance(const Difficulty* difficulty)
 void MineZone::setDifficulty(const Difficulty* difficulty)
 {
     m_difficulty = difficulty;
+
+    //! \todo reinitialise m_mine_blocks
 }
 
 void MineZone::displayDifficulty()
@@ -46,4 +49,130 @@ void MineZone::displayDifficulty()
               << m_difficulty->height << " × " << m_difficulty->width << std::endl;
     std::cout << "         >> Number of mines: "
               << m_difficulty->num_of_mines << std::endl;
+}
+
+void MineZone::initMines()
+{
+    int rdm;
+    for (int num = 0; num < m_difficulty->num_of_mines;) {
+        rdm = rand() % m_mine_blocks->size();
+        if (!(*m_mine_blocks)[rdm]->isMine()) {
+            (*m_mine_blocks)[rdm]->setMine(true);
+            num ++;
+        }
+    }
+    for (MineBlock* block : *m_mine_blocks) {
+        int w = m_difficulty->width;
+        int h = m_difficulty->height;
+        if (block->id() % w == 0 && block->id() != w && block->id() != w*h)
+            block->setNeighbors(
+                (*m_mine_blocks)[block->id() - w - 1 - 1],
+                (*m_mine_blocks)[block->id() - w     - 1],
+                nullptr,
+                (*m_mine_blocks)[block->id()     - 1 - 1],
+                nullptr,
+                (*m_mine_blocks)[block->id() + w - 1 - 1],
+                (*m_mine_blocks)[block->id() + w     - 1],
+                nullptr
+            );
+        else if (block->id() % w == 1 && block->id() != 1 && block->id() != (w*h - w + 1))
+            block->setNeighbors(
+                nullptr,
+                (*m_mine_blocks)[block->id() - w     - 1],
+                (*m_mine_blocks)[block->id() - w + 1 - 1],
+                nullptr,
+                (*m_mine_blocks)[block->id()     + 1 - 1],
+                nullptr,
+                (*m_mine_blocks)[block->id() + w     - 1],
+                (*m_mine_blocks)[block->id() + w + 1 - 1]
+           );
+        else if (block->id() > 1 && block->id() < w)
+            block->setNeighbors(
+                nullptr,
+                nullptr,
+                nullptr,
+                (*m_mine_blocks)[block->id()     - 1 - 1],
+                (*m_mine_blocks)[block->id()     + 1 - 1],
+                (*m_mine_blocks)[block->id() + w - 1 - 1],
+                (*m_mine_blocks)[block->id() + w     - 1],
+                (*m_mine_blocks)[block->id() + w + 1 - 1]
+           );
+        else if (block->id() > (w*h - w + 1) && block->id() < w*h)
+            block->setNeighbors(
+                (*m_mine_blocks)[block->id() - w - 1 - 1],
+                (*m_mine_blocks)[block->id() - w     - 1],
+                (*m_mine_blocks)[block->id() - w + 1 - 1],
+                (*m_mine_blocks)[block->id()     - 1 - 1],
+                (*m_mine_blocks)[block->id()     + 1 - 1],
+                nullptr,
+                nullptr,
+                nullptr
+           );
+        else if (block->id() == 1)
+            block->setNeighbors(
+                nullptr,
+                nullptr,
+                nullptr,
+                nullptr,
+                (*m_mine_blocks)[block->id()     + 1 - 1],
+                nullptr,
+                (*m_mine_blocks)[block->id() + w - 1 - 1],
+                (*m_mine_blocks)[block->id() + w + 1 - 1]
+           );
+        else if (block->id() == w)
+            block->setNeighbors(
+                nullptr,
+                nullptr,
+                nullptr,
+                (*m_mine_blocks)[block->id()     - 1 - 1],
+                nullptr,
+                (*m_mine_blocks)[block->id() + w - 1 - 1],
+                (*m_mine_blocks)[block->id() + w     - 1],
+                nullptr
+           );
+        else if (block->id() == (w*h - w + 1))
+            block->setNeighbors(
+                nullptr,
+                (*m_mine_blocks)[block->id() - w     - 1],
+                (*m_mine_blocks)[block->id() - w + 1 - 1],
+                nullptr,
+                (*m_mine_blocks)[block->id()     + 1 - 1],
+                nullptr,
+                nullptr,
+                nullptr
+           );
+        else if (block->id() == w*h)
+            block->setNeighbors(
+                (*m_mine_blocks)[block->id() - w - 1 - 1],
+                (*m_mine_blocks)[block->id() - w     - 1],
+                nullptr,
+                (*m_mine_blocks)[block->id()     - 1 - 1],
+                nullptr,
+                nullptr,
+                nullptr,
+                nullptr
+           );
+        else
+            block->setNeighbors(
+                (*m_mine_blocks)[block->id() - w - 1 - 1],
+                (*m_mine_blocks)[block->id() - w     - 1],
+                (*m_mine_blocks)[block->id() - w + 1 - 1],
+                (*m_mine_blocks)[block->id()     - 1 - 1],
+                (*m_mine_blocks)[block->id()     + 1 - 1],
+                (*m_mine_blocks)[block->id() + w - 1 - 1],
+                (*m_mine_blocks)[block->id() + w     - 1],
+                (*m_mine_blocks)[block->id() + w + 1 - 1]
+           );
+        block->setValue();
+    }
+}
+
+void MineZone::dev_showMines()
+{
+    for (MineBlock* block : *m_mine_blocks) {
+        if (block->isMine()) std::cout << "X";
+        else std::cout << block->value();
+        if (block->id() % 9 == 0) std::cout << '\n';
+        else std::cout << '\t';
+    }
 }
