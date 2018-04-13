@@ -17,9 +17,9 @@ public:
     /* ****************************************************************************************
      * Accessors & Mutators
      * ****************************************************************************************/
-    int     id()        { return m_id; }
-    bool    isMine()    { return m_is_mine; }
-    int     value()     { return m_value; }
+    int     id      ()  { return m_id; }
+    bool    isMine  ()  { return m_is_mine; }
+    int     value   ()  { return m_value; }
 
     void    setNeighbors(MineBlock* top_left,
                          MineBlock* top,
@@ -29,8 +29,13 @@ public:
                          MineBlock* btm_left,
                          MineBlock* btm,
                          MineBlock* btm_right);
-    void    setMine(bool is_mine);
+    void    setMine (bool is_mine);
     void    setValue();
+
+    /* ****************************************************************************************
+     * Public Functions
+     * ****************************************************************************************/
+    int     reveal  ();
 
 private:
     /* ****************************************************************************************
@@ -46,8 +51,8 @@ private:
     MineBlock*  m_btm_right_block;
 
     int     m_id;
-    bool    m_is_mine;
     int     m_value;
+    bool    m_is_mine;
 
 signals:
 

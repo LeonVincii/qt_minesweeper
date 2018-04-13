@@ -43,6 +43,7 @@ public:
     void setDifficulty      (const Difficulty* difficulty);
     void displayDifficulty  ();
     void initMines          ();
+    void revealBlock        (int x, int y);
     void dev_showMines      ();
 
 private:

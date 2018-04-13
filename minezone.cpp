@@ -167,6 +167,13 @@ void MineZone::initMines()
     }
 }
 
+void MineZone::revealBlock(int x, int y)
+{
+    // translate the 2-d coordinates to vector index
+    int index = (y - 1) * w + x - 1;
+    (*m_mine_blocks)[index]->reveal();
+}
+
 void MineZone::dev_showMines()
 {
     for (MineBlock* block : *m_mine_blocks) {
