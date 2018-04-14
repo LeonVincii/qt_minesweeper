@@ -2,7 +2,11 @@
 #include "mineblock.h"
 
 #include <cstdlib>
+#include <ctime>
 #include <iostream>
+#include <queue>
+#include <vector>
+#include <QtAlgorithms>
 
 MineZone* MineZone::m_instance = nullptr;
 
@@ -54,6 +58,7 @@ void MineZone::displayDifficulty()
 void MineZone::initMines()
 {
     int rdm;
+    srand(time(0));
     for (int num = 0; num < m_difficulty->num_of_mines;) {
         rdm = rand() % m_mine_blocks->size();
         if (!(*m_mine_blocks)[rdm]->isMine()) {
@@ -167,19 +172,54 @@ void MineZone::initMines()
     }
 }
 
-void MineZone::revealBlock(int x, int y)
+bool MineZone::revealBlock(int x, int y)
 {
-    // translate the 2-d coordinates to vector index
-    int index = (y - 1) * w + x - 1;
-    (*m_mine_blocks)[index]->reveal();
+    std::queue<MineBlock*> q;
+    int                    dimen = m_difficulty->width * m_difficulty->height;
+    std::vector<bool>      p     = std::vector<bool>(dimen);
+    int                    index = (y - 1) * m_difficulty->width + x - 1;
+    MineBlock*             root  = (*m_mine_blocks)[index];
+
+    if (root->revealed())  return true;
+    if (root->isMine())    return false;
+
+    q.push(root);
+    while (!q.empty()) {
+        MineBlock* block = q.front();
+        int        value = block->reveal();
+        if (value == 0) {
+            for (MineBlock* neighbor : *block->neighbors())
+                if (!p[neighbor->id() - 1]) q.push(neighbor);
+        }
+        p[block->id() - 1] = 1;
+        q.pop();
+    }
+    return true;
 }
 
-void MineZone::dev_showMines()
+void MineZone::drawBlocks()
+{
+    std::cout << " 0\t";
+    for (int i = 1; i <= m_difficulty->width; i ++)
+        std::cout << " " << i << " ";
+    std::cout << std::endl << " 1\t";
+    int i = 1;
+    for (MineBlock* block : *m_mine_blocks) {
+        block->draw();
+        if (block->id() % m_difficulty->width == 0) {
+            std::cout << '\n';
+            if (i < m_difficulty->height) std::cout << " " << ++ i << "\t";
+        }
+    }
+}
+
+void MineZone::cheat_showMines()
 {
     for (MineBlock* block : *m_mine_blocks) {
+        std::cout << "[";
         if (block->isMine()) std::cout << "X";
         else std::cout << block->value();
+        std::cout << "]";
         if (block->id() % 9 == 0) std::cout << '\n';
-        else std::cout << '\t';
     }
 }

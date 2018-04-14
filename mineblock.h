@@ -17,9 +17,13 @@ public:
     /* ****************************************************************************************
      * Accessors & Mutators
      * ****************************************************************************************/
-    int     id      ()  { return m_id; }
-    bool    isMine  ()  { return m_is_mine; }
-    int     value   ()  { return m_value; }
+    int         id       ()  { return m_id;        }
+    int         value    ()  { return m_value;     }
+    bool        isMine   ()  { return m_is_mine;   }
+    bool        revealed ()  { return m_revealed;  }
+
+    typedef     MineBlock* (*Neighbors)[8];
+    Neighbors   neighbors()  { return &m_neighbors; }
 
     void    setNeighbors(MineBlock* top_left,
                          MineBlock* top,
@@ -36,23 +40,17 @@ public:
      * Public Functions
      * ****************************************************************************************/
     int     reveal  ();
+    void    draw    ();
 
 private:
     /* ****************************************************************************************
      * Attributes
      * ****************************************************************************************/
-    MineBlock*  m_top_left_block;
-    MineBlock*  m_top_block;
-    MineBlock*  m_top_right_block;
-    MineBlock*  m_left_block;
-    MineBlock*  m_right_block;
-    MineBlock*  m_btm_left_block;
-    MineBlock*  m_btm_block;
-    MineBlock*  m_btm_right_block;
-
-    int     m_id;
-    int     m_value;
-    bool    m_is_mine;
+    int         m_id;
+    int         m_value;
+    bool        m_is_mine;
+    bool        m_revealed;
+    MineBlock*  m_neighbors[8];
 
 signals:
 

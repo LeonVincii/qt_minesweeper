@@ -34,8 +34,8 @@ public:
      * Accessors & Mutators
      * ****************************************************************************************/
     static MineZone*    instance    (const Difficulty* difficulty);
-    const Difficulty&   difficulty  ()    const   { return *m_difficulty; }
-    const MineBlockArr* mineBlocks  ()    const   { return m_mine_blocks; }
+    const Difficulty&   difficulty  () const   { return *m_difficulty; }
+    const MineBlockArr* mineBlocks  () const   { return m_mine_blocks; }
 
     /* ****************************************************************************************
      * Public Functions
@@ -43,8 +43,9 @@ public:
     void setDifficulty      (const Difficulty* difficulty);
     void displayDifficulty  ();
     void initMines          ();
-    void revealBlock        (int x, int y);
-    void dev_showMines      ();
+    bool revealBlock        (int x, int y);
+    void drawBlocks         ();
+    void cheat_showMines    ();
 
 private:
     /* ****************************************************************************************

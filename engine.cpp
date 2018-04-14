@@ -43,9 +43,9 @@ void Engine::on()
             else    std::cout << "ENGINE >> Command not recognized" << std::endl;
         }
         else if (!cmd.compare("showdiff"))    m_minezone->displayDifficulty();
-        else if (!cmd.compare("cheat"))       m_minezone->dev_showMines();
-        else if (!cmd.compare("quit")) break;
-        else std::cout << "ENGINE >> Command not recognized" << std::endl;
+        else if (!cmd.compare("cheat"))       m_minezone->cheat_showMines();
+        else if (!cmd.compare("quit"))        break;
+        else    std::cout << "ENGINE >> Command not recognized" << std::endl;
     }
 }
 
@@ -58,6 +58,17 @@ void Engine::startGame()
 {
     std::cout << "ENGINE >> Starting game" << std::endl;
     m_minezone->initMines();
+    bool alive = false;
+    do {
+        m_minezone->drawBlocks();
+        std::cout << "ENGINE >> Input coordinate to reveal (top-left is [1, 1])" << std::endl;
+        int x, y;
+        std::cout << "x $$ ";
+        std::cin >> x;
+        std::cout << "y $$ ";
+        std::cin >> y;
+        alive = m_minezone->revealBlock(x, y);
+    } while(alive);
 }
 
 void Engine::gameOver()

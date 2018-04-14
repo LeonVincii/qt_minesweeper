@@ -1,10 +1,13 @@
 #include "mineblock.h"
 
+#include <iostream>
+
 MineBlock::MineBlock(QObject *parent, int id) :
     QObject     (parent),
     m_id        (id),
+    m_value     (0),
     m_is_mine   (false),
-    m_value     (0)
+    m_revealed  (false)
 {}
 
 MineBlock::~MineBlock()
@@ -19,14 +22,14 @@ void MineBlock::setNeighbors(MineBlock* top_left,
                              MineBlock* btm,
                              MineBlock* btm_right)
 {
-    m_top_left_block    = top_left;
-    m_top_block         = top;
-    m_top_right_block   = top_right;
-    m_left_block        = left;
-    m_right_block       = right;
-    m_btm_left_block    = btm_left;
-    m_btm_block         = btm;
-    m_btm_right_block   = btm_right;
+    m_neighbors[0] = top_left;
+    m_neighbors[1] = top;
+    m_neighbors[2] = top_right;
+    m_neighbors[3] = left;
+    m_neighbors[4] = right;
+    m_neighbors[5] = btm_left;
+    m_neighbors[6] = btm;
+    m_neighbors[7] = btm_right;
 }
 
 void MineBlock::setMine(bool is_mine)
@@ -37,32 +40,26 @@ void MineBlock::setMine(bool is_mine)
 void MineBlock::setValue()
 {
     if (m_is_mine) m_value = 99;
-    else {
-        int top_left_val    = (m_top_left_block == NULL)    ? 0 : m_top_left_block->isMine();
-        int top_val         = (m_top_block == NULL)         ? 0 : m_top_block->isMine();
-        int top_right_val   = (m_top_right_block == NULL)   ? 0 : m_top_right_block->isMine();
-        int left_val        = (m_left_block == NULL)        ? 0 : m_left_block->isMine();
-        int right_val       = (m_right_block == NULL)       ? 0 : m_right_block->isMine();
-        int btm_left_val    = (m_btm_left_block == NULL)    ? 0 : m_btm_left_block->isMine();
-        int btm_val         = (m_btm_block == NULL)         ? 0 : m_btm_block->isMine();
-        int btm_right_val   = (m_btm_right_block == NULL)   ? 0 : m_btm_right_block->isMine();
-
-        m_value             = top_left_val + top_val + top_right_val +
-                              left_val     +           right_val     +
-                              btm_left_val + btm_val + btm_right_val ;
-    }
+    else
+        for (MineBlock* neighbor : m_neighbors)
+            m_value += (neighbor == NULL) ? 0 : neighbor->isMine();
 }
 
 int MineBlock::reveal()
 {
+    m_revealed = true;
     // if reveal a mine, game is over
-    if (m_is_mine) return 1;
+    if (m_is_mine) return -1;
+    return m_value;
+}
 
-    // if the value of this block is 0, reveal surrounding 0 value blocks in a recursive way;
-    //
-    if (m_value == 0) {
-
+void MineBlock::draw()
+{
+    std::cout << "[";
+    if (revealed()) {
+        if (m_is_mine) std::cout << "X";
+        else std::cout << m_value;
     }
-
-    return 0;
+    else std::cout << " ";
+    std::cout << "]";
 }
