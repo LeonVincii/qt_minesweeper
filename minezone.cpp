@@ -34,7 +34,7 @@ void MineZone::displayDifficulty()
     std::cout << "MINEZONE >> Current mine zone is set to the difficulty of: "
               << m_difficulty->difficulty << std::endl;
     std::cout << "         >> Dimension: "
-              << m_difficulty->height << " × " << m_difficulty->width << std::endl;
+              << m_difficulty->width << " × " << m_difficulty->height << std::endl;
     std::cout << "         >> Number of mines: "
               << m_difficulty->num_of_mines << std::endl;
 }
@@ -172,9 +172,11 @@ bool MineZone::revealBlock(int x, int y)
         MineBlock* block = q.front();
         int        value = block->reveal();
         if (value == 0) {
-            for (MineBlock* neighbor : *block->neighbors())
-                if (!p[neighbor->id() - 1] && neighbor != NULL)
-                    q.push(neighbor);
+            int neighbor_size = sizeof(*block->neighbors()) / sizeof(*block->neighbors())[0];
+            for (int i = 0; i < neighbor_size; i ++) {
+                if ((*block->neighbors())[i] != NULL && !p[(*block->neighbors())[i]->id() - 1])
+                    q.push((*block->neighbors())[i]);
+            }
         }
         p[block->id() - 1] = 1;
         q.pop();

@@ -24,7 +24,7 @@ public:
     bool        isMine   ()  { return m_is_mine;   }
     BlockState  state    ()  { return m_state;     }
 
-    typedef     MineBlock* (*Neighbors)[8];
+    typedef     MineBlock*   (*Neighbors)[8];
     Neighbors   neighbors()  { return &m_neighbors; }
 
     void    setNeighbors(MineBlock* top_left,
