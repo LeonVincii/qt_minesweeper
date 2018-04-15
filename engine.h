@@ -34,8 +34,9 @@ private:
     /* ****************************************************************************************
      * Attributes
      * ****************************************************************************************/
-    static Engine*  m_instance;
-    MineZone* m_minezone;
+    static Engine*      m_instance;
+    MineZone*           m_minezone;
+    const Difficulty*   m_difficulty;
 
     /* ****************************************************************************************
      * Member Functions

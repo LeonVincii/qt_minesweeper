@@ -3,6 +3,8 @@
 
 #include <QObject>
 
+enum BlockState { NONE, REVEALED, MARKED };
+
 class MineBlock : public QObject
 {
     Q_OBJECT
@@ -20,7 +22,7 @@ public:
     int         id       ()  { return m_id;        }
     int         value    ()  { return m_value;     }
     bool        isMine   ()  { return m_is_mine;   }
-    bool        revealed ()  { return m_revealed;  }
+    BlockState  state    ()  { return m_state;     }
 
     typedef     MineBlock* (*Neighbors)[8];
     Neighbors   neighbors()  { return &m_neighbors; }
@@ -40,6 +42,7 @@ public:
      * Public Functions
      * ****************************************************************************************/
     int     reveal  ();
+    void    mark    ();
     void    draw    ();
 
 private:
@@ -49,8 +52,8 @@ private:
     int         m_id;
     int         m_value;
     bool        m_is_mine;
-    bool        m_revealed;
     MineBlock*  m_neighbors[8];
+    BlockState  m_state;
 
 signals:
 

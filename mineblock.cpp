@@ -7,7 +7,7 @@ MineBlock::MineBlock(QObject *parent, int id) :
     m_id        (id),
     m_value     (0),
     m_is_mine   (false),
-    m_revealed  (false)
+    m_state     (NONE)
 {}
 
 MineBlock::~MineBlock()
@@ -47,19 +47,26 @@ void MineBlock::setValue()
 
 int MineBlock::reveal()
 {
-    m_revealed = true;
+    if (m_state == NONE) m_state = REVEALED;
     // if reveal a mine, game is over
     if (m_is_mine) return -1;
     return m_value;
 }
 
+void MineBlock::mark()
+{
+    if (m_state == NONE)    { m_state = MARKED; return; }
+    if (m_state == MARKED)  { m_state = NONE;   return; }
+}
+
 void MineBlock::draw()
 {
     std::cout << "[";
-    if (revealed()) {
+    if (m_state == REVEALED) {
         if (m_is_mine) std::cout << "X";
         else std::cout << m_value;
     }
+    else if (m_state == MARKED) std::cout << "^";
     else std::cout << " ";
     std::cout << "]";
 }

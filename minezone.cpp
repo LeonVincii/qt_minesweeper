@@ -8,41 +8,25 @@
 #include <vector>
 #include <QtAlgorithms>
 
-MineZone* MineZone::m_instance = nullptr;
-
 MineZone::MineZone(QObject *parent, const Difficulty* difficulty) :
     QObject         (parent),
     m_difficulty    (difficulty),
     m_mine_blocks   (new MineBlockArr(difficulty->height * difficulty->width))
 {
-    std::cout << "MINEZONE >> Initializing mine zone with default difficulty: "
+    std::cout << "MINEZONE >> Initializing mine zone with difficulty: "
               << m_difficulty->difficulty << std::endl;
     // initialise mine blocks' id
     for (int i = 0; i < m_mine_blocks->size(); i ++) {
         (*m_mine_blocks)[i] = new MineBlock(nullptr, i + 1);
     }
-    std::cout << "         >> Default Mine zone initialized successfully" << std::endl;
+    std::cout << "         >> Mine zone initialized successfully" << std::endl;
+    MineZone::displayDifficulty();
 }
 
 MineZone::~MineZone()
 {
     for (MineBlock* mb : *m_mine_blocks) delete mb;
     delete m_mine_blocks;
-}
-
-MineZone* MineZone::instance(const Difficulty* difficulty)
-{
-    if (!m_instance) {
-        m_instance = new MineZone(nullptr, difficulty);
-    }
-    return m_instance;
-}
-
-void MineZone::setDifficulty(const Difficulty* difficulty)
-{
-    m_difficulty = difficulty;
-
-    //! \todo reinitialise m_mine_blocks
 }
 
 void MineZone::displayDifficulty()
@@ -180,8 +164,8 @@ bool MineZone::revealBlock(int x, int y)
     int                    index = (y - 1) * m_difficulty->width + x - 1;
     MineBlock*             root  = (*m_mine_blocks)[index];
 
-    if (root->revealed())  return true;
-    if (root->isMine())    return false;
+    if (root->state() == REVEALED)  return true;
+    if (root->isMine())             return false;
 
     q.push(root);
     while (!q.empty()) {
@@ -189,7 +173,8 @@ bool MineZone::revealBlock(int x, int y)
         int        value = block->reveal();
         if (value == 0) {
             for (MineBlock* neighbor : *block->neighbors())
-                if (!p[neighbor->id() - 1]) q.push(neighbor);
+                if (!p[neighbor->id() - 1] && neighbor != NULL)
+                    q.push(neighbor);
         }
         p[block->id() - 1] = 1;
         q.pop();
@@ -197,29 +182,42 @@ bool MineZone::revealBlock(int x, int y)
     return true;
 }
 
+void MineZone::markBlock(int x, int y)
+{
+    int         index = (y - 1) * m_difficulty->width + x - 1;
+    MineBlock*  block = (*m_mine_blocks)[index];
+    block->mark();
+}
+
 void MineZone::drawBlocks()
 {
-    std::cout << " 0\t";
+    std::cout << std::endl;
     for (int i = 1; i <= m_difficulty->width; i ++)
-        std::cout << " " << i << " ";
-    std::cout << std::endl << " 1\t";
+        std::cout << " " << i % 10 << " ";
+    std::cout << std::endl;
     int i = 1;
     for (MineBlock* block : *m_mine_blocks) {
         block->draw();
-        if (block->id() % m_difficulty->width == 0) {
-            std::cout << '\n';
-            if (i < m_difficulty->height) std::cout << " " << ++ i << "\t";
-        }
+        if (block->id() % m_difficulty->width == 0)
+            std::cout << " " << i ++ << std::endl;
     }
+    std::cout << std::endl;
 }
 
-void MineZone::cheat_showMines()
+void MineZone::cheat_showMines() // for dev purpose, will delete later
 {
+    std::cout << std::endl;
+    for (int i = 1; i <= m_difficulty->width; i ++)
+        std::cout << " " << i % 10 << " ";
+    std::cout << std::endl;
+    int i = 1;
     for (MineBlock* block : *m_mine_blocks) {
         std::cout << "[";
         if (block->isMine()) std::cout << "X";
         else std::cout << block->value();
         std::cout << "]";
-        if (block->id() % 9 == 0) std::cout << '\n';
+        if (block->id() % m_difficulty->width == 0)
+            std::cout << " " << i ++ << std::endl;
     }
+    std::cout << std::endl;
 }

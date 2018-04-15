@@ -2,10 +2,17 @@
 #include "minezone.h"
 
 #include <iostream>
+#include <QStringList>
+#include <QTextStream>
+
+QTextStream in  (stdin);
+QTextStream out (stdout, QIODevice::WriteOnly);
 
 Engine* Engine::m_instance = nullptr;
 
-Engine::Engine(QObject *parent) : QObject(parent)
+Engine::Engine(QObject *parent) :
+    QObject         (parent),
+    m_difficulty    (&EASY)
 {}
 
 Engine::~Engine()
@@ -23,28 +30,21 @@ Engine* Engine::instance()
 
 void Engine::on()
 {
-    m_minezone = MineZone::instance(&EASY);
-    std::string cmd;
-
     std::cout << "ENGINE >> Engine is on" << std::endl;
 
     while (true) {
-        std::cout << "ENGINE $$ (start | showdiff | setdiff | quit) ";
-        std::cin >> cmd;
+        std::cout << "ENGINE $$ (start | setdiff [easy|normal|hard] | quit) ";
+        QString     cmd     = in.readLine();
+        QStringList command = cmd.split(" ");
 
-        if (!cmd.compare("start")) Engine::startGame();
-        else if (!cmd.compare("setdiff")) {
-            std::cout << "ENGINE $$ (easy | normal | hard) ";
-            std::string diff;
-            std::cin >> diff;
-            if      (!diff.compare("easy"))   m_minezone->setDifficulty(&EASY);
-            else if (!diff.compare("normal")) m_minezone->setDifficulty(&NORMAL);
-            else if (!diff.compare("hard"))   m_minezone->setDifficulty(&HARD);
+        if (!QString::compare(command.at(0), "start")) Engine::startGame();
+        else if (!QString::compare(command.at(0), "setdiff")) {
+            if      (!QString::compare(command.at(1), "easy"))   m_difficulty = &EASY;
+            else if (!QString::compare(command.at(1), "normal")) m_difficulty = &NORMAL;
+            else if (!QString::compare(command.at(1), "hard"))   m_difficulty = &HARD;
             else    std::cout << "ENGINE >> Command not recognized" << std::endl;
         }
-        else if (!cmd.compare("showdiff"))    m_minezone->displayDifficulty();
-        else if (!cmd.compare("cheat"))       m_minezone->cheat_showMines();
-        else if (!cmd.compare("quit"))        break;
+        else if (!QString::compare(command.at(0), "quit"))        break;
         else    std::cout << "ENGINE >> Command not recognized" << std::endl;
     }
 }
@@ -56,19 +56,37 @@ void Engine::off()
 
 void Engine::startGame()
 {
+    m_minezone = new MineZone(NULL, m_difficulty);
+    std::string name;
     std::cout << "ENGINE >> Starting game" << std::endl;
+    std::cout << "ENGINE >> Please enter your name to start" << std::endl;
+    std::cout << "ENGINE $$ ";
+    std::cin  >> name;
+    std::cout << "ENGINE >> (r x y) for revealing block [x, y]" << std::endl;
+    std::cout << "ENGINE >> (m x y) for marking block [x, y] as mine" << std::endl;
+    std::cout << "ENGINE >> (back) to get back to menu" << std::endl;
     m_minezone->initMines();
     bool alive = false;
     do {
         m_minezone->drawBlocks();
-        std::cout << "ENGINE >> Input coordinate to reveal (top-left is [1, 1])" << std::endl;
-        int x, y;
-        std::cout << "x $$ ";
-        std::cin >> x;
-        std::cout << "y $$ ";
-        std::cin >> y;
-        alive = m_minezone->revealBlock(x, y);
+        std::cout << name << " $$ ";
+        in.skipWhiteSpace();
+        QString cmd = in.readLine();
+        QStringList command = cmd.split(' ');
+        if      (!QString::compare(command.at(0), "cheat")) m_minezone->cheat_showMines();
+        else if (!QString::compare(command.at(0), "back")) break;
+        else {
+            int x = command.at(1).toInt();
+            int y = command.at(2).toInt();
+            if (!QString::compare(command.at(0), "r"))
+                alive = m_minezone->revealBlock(x, y);
+            else if (!QString::compare(command.at(0), "m")) {
+                alive = true;
+                m_minezone->markBlock(x, y);
+            }
+        }
     } while(alive);
+    delete m_minezone;
 }
 
 void Engine::gameOver()
