@@ -11,7 +11,9 @@
 MineZone::MineZone(QObject *parent, const Difficulty* difficulty) :
     QObject         (parent),
     m_difficulty    (difficulty),
-    m_mine_blocks   (new MineBlockArr(difficulty->height * difficulty->width))
+    m_mine_blocks   (new MineBlockArr(difficulty->height * difficulty->width)),
+    m_countdown     (difficulty->height * difficulty->width),
+    m_flagCountdown (difficulty->num_of_mines)
 {
     std::cout << "MINEZONE >> Initializing mine zone with difficulty: "
               << m_difficulty->difficulty << std::endl;
@@ -105,7 +107,7 @@ void MineZone::initMines()
                 nullptr,
                 (*m_mine_blocks)[block->id()     + 1 - 1],
                 nullptr,
-                (*m_mine_blocks)[block->id() + w - 1 - 1],
+                (*m_mine_blocks)[block->id() + w     - 1],
                 (*m_mine_blocks)[block->id() + w + 1 - 1]
            );
         else if (block->id() == w)
@@ -171,14 +173,19 @@ bool MineZone::revealBlock(int x, int y)
     while (!q.empty()) {
         MineBlock* block = q.front();
         int        value = block->reveal();
+        m_countdown --;
         if (value == 0) {
             int neighbor_size = sizeof(*block->neighbors()) / sizeof(*block->neighbors())[0];
             for (int i = 0; i < neighbor_size; i ++) {
-                if ((*block->neighbors())[i] != NULL && !p[(*block->neighbors())[i]->id() - 1])
+                if ((*block->neighbors())[i] != NULL &&
+                        !p[(*block->neighbors())[i]->id() - 1] &&
+                        (*block->neighbors())[i]->state() == NONE) {
                     q.push((*block->neighbors())[i]);
+                    p[(*block->neighbors())[i]->id() - 1] = true;
+                }
             }
         }
-        p[block->id() - 1] = 1;
+        p[block->id() - 1] = true;
         q.pop();
     }
     return true;
@@ -188,7 +195,10 @@ void MineZone::markBlock(int x, int y)
 {
     int         index = (y - 1) * m_difficulty->width + x - 1;
     MineBlock*  block = (*m_mine_blocks)[index];
-    block->mark();
+    int         mark  = block->mark();
+
+    m_countdown      += mark;
+    m_flagCountdown  += mark;
 }
 
 void MineZone::drawBlocks()

@@ -42,6 +42,7 @@ private:
      * Member Functions
      * ****************************************************************************************/
     void startGame  ();
+    void win        ();
     void gameOver   ();
     void restart    ();
 

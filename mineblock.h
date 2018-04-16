@@ -42,7 +42,7 @@ public:
      * Public Functions
      * ****************************************************************************************/
     int     reveal  ();
-    void    mark    ();
+    int     mark    ();
     void    draw    ();
 
 private:

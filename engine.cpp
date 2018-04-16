@@ -67,14 +67,20 @@ void Engine::startGame()
     std::cout << "ENGINE >> (back) to get back to menu" << std::endl;
     m_minezone->initMines();
     bool alive = false;
+    bool win   = false;
     do {
+        std::cout << std::endl;
+        std::cout << "ENGINE >> Flags: " << m_minezone->flags()
+                  << " Blocks: "         << m_minezone->countdown();
+        std::cout << std::endl;
+
         m_minezone->drawBlocks();
         std::cout << name << " $$ ";
         in.skipWhiteSpace();
         QString cmd = in.readLine();
         QStringList command = cmd.split(' ');
         if      (!QString::compare(command.at(0), "cheat")) m_minezone->cheat_showMines();
-        else if (!QString::compare(command.at(0), "back")) break;
+        else if (!QString::compare(command.at(0),  "back")) break;
         else {
             int x = command.at(1).toInt();
             int y = command.at(2).toInt();
@@ -84,9 +90,20 @@ void Engine::startGame()
                 alive = true;
                 m_minezone->markBlock(x, y);
             }
+            if (m_minezone->countdown() == 0) {
+                win = true;
+                break;
+            }
         }
     } while(alive);
+    if (win) Engine::win();
+    else     Engine::gameOver();
     delete m_minezone;
+}
+
+void Engine::win()
+{
+    std::cout << "ENGINE >> You win!" << std::endl;
 }
 
 void Engine::gameOver()
@@ -96,5 +113,6 @@ void Engine::gameOver()
 
 void Engine::restart()
 {
-    std::cout << "ENGINE >> Restarting game" << std::endl;
+    if (m_minezone != NULL) delete m_minezone;
+    Engine::startGame();
 }

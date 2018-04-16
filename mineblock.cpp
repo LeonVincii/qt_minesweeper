@@ -53,10 +53,10 @@ int MineBlock::reveal()
     return m_value;
 }
 
-void MineBlock::mark()
+int MineBlock::mark()
 {
-    if (m_state == NONE)    { m_state = MARKED; return; }
-    if (m_state == MARKED)  { m_state = NONE;   return; }
+    if (m_state == NONE)    { m_state = MARKED; return -1; }
+    if (m_state == MARKED)  { m_state = NONE;   return  1; }
 }
 
 void MineBlock::draw()
