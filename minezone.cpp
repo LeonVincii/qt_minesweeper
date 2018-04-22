@@ -17,7 +17,8 @@ MineZone::MineZone(QObject *parent, const Difficulty* difficulty) :
 {
     std::cout << "MINEZONE >> Initializing mine zone with difficulty: "
               << m_difficulty->difficulty << std::endl;
-    // initialise mine blocks' id
+
+    // Initialise mine blocks' id
     for (int i = 0; i < m_mine_blocks->size(); i ++) {
         (*m_mine_blocks)[i] = new MineBlock(nullptr, i + 1);
     }

@@ -6,32 +6,31 @@
 MainWidget::MainWidget(QWidget* parent) :
     QWidget         (parent),
     ui              (new Ui::MainWidget),
-    m_engine        (NULL),
-    m_difficulty    (&EASY),
-    m_controlPannel (new QHBoxLayout),
-    m_minePanel     (new QGridLayout)
+    m_engine        (NULL)
 {
     ui->setupUi(this);
-
-    // Connect signals and slots
-    MainWidget::connect(m_engine,   Engine::difficulty_changed,
-                        this,       MainWidget::on_difficulty_changed);
 }
 
 MainWidget::~MainWidget()
 {
     delete ui;
-    delete m_controlPannel;
-    delete m_minePanel;
+    delete m_engine;
 }
 
 void MainWidget::setEngine(Engine* engine)
 {
     m_engine = engine;
+
+    // Connect signals and slots
+    connect(m_engine, &Engine::timeout, this, &MainWidget::on_timeout);
 }
 
-void MainWidget::on_difficulty_changed()
+void MainWidget::on_startBtn_clicked()
 {
-    std::cout << "MainWidget >> Difficulty changed to "
-              << m_difficulty->difficulty << ".\n";
+    m_engine->startGame();
+}
+
+void MainWidget::on_timeout()
+{
+    ui->timeDisplay->display(m_engine->time());
 }

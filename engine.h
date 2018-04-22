@@ -2,12 +2,9 @@
 #define ENGINE_H
 
 #include <QObject>
-#include <QDebug>
+#include <QTimer>
 
 #include "minezone.h"
-
-struct Difficulty;
-class MineZone;
 
 class Engine : public QObject
 {
@@ -17,19 +14,19 @@ public:
     /* ****************************************************************************************
      * Constructor & Destructor
      * ****************************************************************************************/
-    explicit Engine(QObject *parent = nullptr);
-    ~Engine();
+    explicit Engine (QObject *parent = nullptr);
+    ~Engine         ();
 
     /* ****************************************************************************************
      * Accessors & Mutators
      * ****************************************************************************************/
-    const Difficulty&   difficulty()    { return *m_difficulty; }
+    int time        () const { return m_time; }
 
     /* ****************************************************************************************
      * Public Functions
      * ****************************************************************************************/
-    void on         ();
-//  void off        ();
+    void startGame  ();
+    void restartGame();
 
 private:
     /* ****************************************************************************************
@@ -37,19 +34,14 @@ private:
      * ****************************************************************************************/
     MineZone*           m_minezone;
     const Difficulty*   m_difficulty;
-
-    /* ****************************************************************************************
-     * Member Functions
-     * ****************************************************************************************/
-    void startGame  ();
-    void win        ();
-    void gameOver   ();
-    void restart    ();
+    QTimer*             m_timer;
+    int                 m_time;
 
 signals:
-    void difficulty_changed(Difficulty& difficulty);
+    void timeout    ();
 
-public slots:
+private slots:
+    void on_timeout ();
 
 };
 

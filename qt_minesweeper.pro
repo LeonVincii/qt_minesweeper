@@ -31,14 +31,14 @@ SOURCES += \
         main.cpp \
         mineblock.cpp \
         minezone.cpp \
-        engine.cpp \
-    mainwidget.cpp
+    mainwidget.cpp \
+    engine.cpp
 
 HEADERS += \
         mineblock.h \
         minezone.h \
-        engine.h \
-    mainwidget.h
+    mainwidget.h \
+    engine.h
 
 FORMS += \
     mainwidget.ui

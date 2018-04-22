@@ -7,9 +7,6 @@
 
 #include "engine.h"
 
-class Engine;
-struct Difficulty;
-
 namespace Ui {
 class MainWidget;
 }
@@ -22,7 +19,7 @@ public:
     /* ****************************************************************************************
      * Constructor & Destructor
      * ****************************************************************************************/
-    explicit MainWidget(QWidget *parent = 0);
+    explicit MainWidget(QWidget* parent = 0);
     ~MainWidget();
 
     /* ****************************************************************************************
@@ -40,13 +37,12 @@ private:
      * Attributes
      * ****************************************************************************************/
     Ui::MainWidget*       ui;
-    const Engine*         m_engine;
-    const Difficulty*     m_difficulty;
-    const QHBoxLayout*    m_controlPannel;
-    const QGridLayout*    m_minePanel;
+    Engine*               m_engine;
 
 private slots:
-    void on_difficulty_changed();
+    void on_startBtn_clicked();
+    void on_timeout();
+
 };
 
 #endif // MAINWIDGET_H

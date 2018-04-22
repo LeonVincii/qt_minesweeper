@@ -3,6 +3,7 @@
 
 #include <QObject>
 #include <QVector>
+#include <QTimer>
 
 struct Difficulty {
     std::string difficulty;
@@ -34,14 +35,15 @@ public:
      * Accessors & Mutators
      * ****************************************************************************************/
     const Difficulty&   difficulty  () const   { return *m_difficulty;    }
-    const MineBlockArr* mineBlocks  () const   { return  m_mine_blocks;   }
+    const MineBlockArr& mineBlocks  () const   { return *m_mine_blocks;   }
     int                 countdown   ()         { return  m_countdown;     }
     int                 flags       ()         { return  m_flagCountdown; }
+
+    void setDifficulty      (const Difficulty* difficulty);
 
     /* ****************************************************************************************
      * Public Functions
      * ****************************************************************************************/
-    void setDifficulty      (const Difficulty* difficulty);
     void displayDifficulty  ();
     void initMines          ();
     bool revealBlock        (int x, int y);
@@ -56,19 +58,10 @@ private:
     static MineZone*    m_instance;
     const Difficulty*   m_difficulty;
     MineBlockArr*       m_mine_blocks;
+    QTimer*             m_timer;
+    int                 m_time;
     int                 m_countdown;
     int                 m_flagCountdown;
-
-    /* ****************************************************************************************
-     * Member Functions
-     * ****************************************************************************************/
-    void setCountdown       ();
-    void setFlagCountdown   ();
-
-signals:
-
-public slots:
-
 };
 
 #endif // MINEZONE_H
