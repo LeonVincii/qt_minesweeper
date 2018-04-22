@@ -49,10 +49,10 @@ void Engine::on()
     }
 }
 
-void Engine::off()
-{
-    Engine::~Engine();
-}
+//void Engine::off()
+//{
+//    Engine::~Engine();
+//}
 
 void Engine::startGame()
 {
