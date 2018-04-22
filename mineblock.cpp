@@ -1,6 +1,6 @@
-#include "mineblock.h"
-
 #include <iostream>
+
+#include "mineblock.h"
 
 MineBlock::MineBlock(QObject *parent, int id) :
     QObject     (parent),

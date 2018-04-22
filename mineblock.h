@@ -27,14 +27,14 @@ public:
     typedef     MineBlock*   (*Neighbors)[8];
     Neighbors   neighbors()  { return &m_neighbors; }
 
-    void    setNeighbors(MineBlock* top_left,
-                         MineBlock* top,
-                         MineBlock* top_right,
-                         MineBlock* left,
-                         MineBlock* right,
-                         MineBlock* btm_left,
-                         MineBlock* btm,
-                         MineBlock* btm_right);
+    void    setNeighbors( MineBlock* top_left,
+                          MineBlock* top,
+                          MineBlock* top_right,
+                          MineBlock* left,
+                          MineBlock* right,
+                          MineBlock* btm_left,
+                          MineBlock* btm,
+                          MineBlock* btm_right );
     void    setMine (bool is_mine);
     void    setValue();
 

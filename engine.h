@@ -4,8 +4,9 @@
 #include <QObject>
 #include <QDebug>
 
-struct Difficulty;
+#include "minezone.h"
 
+struct Difficulty;
 class MineZone;
 
 class Engine : public QObject
@@ -14,9 +15,15 @@ class Engine : public QObject
 
 public:
     /* ****************************************************************************************
+     * Constructor & Destructor
+     * ****************************************************************************************/
+    explicit Engine(QObject *parent = nullptr);
+    ~Engine();
+
+    /* ****************************************************************************************
      * Accessors & Mutators
      * ****************************************************************************************/
-    static Engine*      instance();
+    const Difficulty&   difficulty()    { return *m_difficulty; }
 
     /* ****************************************************************************************
      * Public Functions
@@ -26,15 +33,8 @@ public:
 
 private:
     /* ****************************************************************************************
-     * Constructor & Destructor
-     * ****************************************************************************************/
-    explicit Engine(QObject *parent = nullptr);
-    virtual ~Engine();
-
-    /* ****************************************************************************************
      * Attributes
      * ****************************************************************************************/
-    static Engine*      m_instance;
     MineZone*           m_minezone;
     const Difficulty*   m_difficulty;
 
@@ -47,6 +47,7 @@ private:
     void restart    ();
 
 signals:
+    void difficulty_changed(Difficulty& difficulty);
 
 public slots:
 

@@ -1,14 +1,11 @@
-#include "engine.h"
-#include "minezone.h"
-
 #include <iostream>
 #include <QStringList>
 #include <QTextStream>
 
+#include "engine.h"
+
 QTextStream in  (stdin);
 QTextStream out (stdout, QIODevice::WriteOnly);
-
-Engine* Engine::m_instance = nullptr;
 
 Engine::Engine(QObject *parent) :
     QObject         (parent),
@@ -18,14 +15,6 @@ Engine::Engine(QObject *parent) :
 Engine::~Engine()
 {
     delete m_minezone;
-}
-
-Engine* Engine::instance()
-{
-    if (!m_instance) {
-        m_instance = new Engine();
-    }
-    return m_instance;
 }
 
 void Engine::on()

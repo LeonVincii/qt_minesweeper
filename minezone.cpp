@@ -1,12 +1,12 @@
-#include "minezone.h"
-#include "mineblock.h"
-
 #include <cstdlib>
 #include <ctime>
 #include <iostream>
 #include <queue>
 #include <vector>
 #include <QtAlgorithms>
+
+#include "minezone.h"
+#include "mineblock.h"
 
 MineZone::MineZone(QObject *parent, const Difficulty* difficulty) :
     QObject         (parent),
