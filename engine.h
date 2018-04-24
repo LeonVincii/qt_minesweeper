@@ -15,12 +15,14 @@ public:
      * Constructor & Destructor
      * ****************************************************************************************/
     explicit Engine (QObject *parent = nullptr);
-    ~Engine         ();
+    ~Engine();
 
     /* ****************************************************************************************
      * Accessors & Mutators
      * ****************************************************************************************/
-    int time        () const { return m_time; }
+    int time() const { return m_time; }
+    int row () const { return m_difficulty->height; }
+    int col () const { return m_difficulty->width;  }
 
     /* ****************************************************************************************
      * Public Functions

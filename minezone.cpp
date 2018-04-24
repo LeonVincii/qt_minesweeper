@@ -13,7 +13,7 @@ MineZone::MineZone(QObject *parent, const Difficulty* difficulty) :
     m_difficulty    (difficulty),
     m_mine_blocks   (new MineBlockArr(difficulty->height * difficulty->width)),
     m_countdown     (difficulty->height * difficulty->width),
-    m_flagCountdown (difficulty->num_of_mines)
+    m_flag_countdown (difficulty->num_of_mines)
 {
     std::cout << "MINEZONE >> Initializing mine zone with difficulty: "
               << m_difficulty->difficulty << std::endl;
@@ -199,7 +199,7 @@ void MineZone::markBlock(int x, int y)
     int         mark  = block->mark();
 
     m_countdown      += mark;
-    m_flagCountdown  += mark;
+    m_flag_countdown  += mark;
 }
 
 void MineZone::drawBlocks()

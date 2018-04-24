@@ -28,17 +28,23 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += \
-        main.cpp \
-        mineblock.cpp \
-        minezone.cpp \
-        mainwidget.cpp \
-        engine.cpp
+    main.cpp \
+    mineblock.cpp \
+    minezone.cpp \
+    mainwidget.cpp \
+    engine.cpp \
+    mineblockwidget.cpp
 
 HEADERS += \
-        mineblock.h \
-        minezone.h \
-        mainwidget.h \
-        engine.h
+    mineblock.h \
+    minezone.h \
+    mainwidget.h \
+    engine.h \
+    mineblockwidget.h
 
 FORMS += \
-        mainwidget.ui
+    mainwidget.ui \
+    mineblockwidget.ui
+
+RESOURCES += \
+    resources.qrc

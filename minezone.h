@@ -37,7 +37,7 @@ public:
     const Difficulty&   difficulty  () const   { return *m_difficulty;    }
     const MineBlockArr& mineBlocks  () const   { return *m_mine_blocks;   }
     int                 countdown   ()         { return  m_countdown;     }
-    int                 flags       ()         { return  m_flagCountdown; }
+    int                 flags       ()         { return  m_flag_countdown;}
 
     void setDifficulty      (const Difficulty* difficulty);
 
@@ -61,7 +61,7 @@ private:
     QTimer*             m_timer;
     int                 m_time;
     int                 m_countdown;
-    int                 m_flagCountdown;
+    int                 m_flag_countdown;
 };
 
 #endif // MINEZONE_H
