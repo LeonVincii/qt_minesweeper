@@ -35,6 +35,5 @@ void Engine::restartGame()
 void Engine::on_timeout()
 {
     m_time ++;
-    std::cout << m_time << std::endl;
     emit timeout();
 }

@@ -4,7 +4,6 @@
 #include <QWidget>
 #include <QVector>
 
-#include "engine.h"
 #include "mineblockwidget.h"
 
 namespace Ui {
@@ -43,6 +42,9 @@ private:
 private slots:
     void on_startBtn_clicked();
     void on_timeout();
+
+public slots:
+    void on_mineBlockWidget_clicked(int id, Qt::MouseButton btn);
 };
 
 #endif // MAINWIDGET_H

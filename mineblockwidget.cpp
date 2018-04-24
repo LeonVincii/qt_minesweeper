@@ -15,3 +15,8 @@ MineBlockWidget::~MineBlockWidget()
 {
     delete ui;
 }
+
+void MineBlockWidget::mousePressEvent(QMouseEvent* event)
+{
+    emit MineBlockWidget::clicked(m_id, event->button());
+}

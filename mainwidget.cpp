@@ -1,6 +1,8 @@
 #include "mainwidget.h"
 #include "ui_mainwidget.h"
 
+#include <iostream>
+
 MainWidget::MainWidget(QWidget* parent, Engine* engine) :
     QWidget         (parent),
     ui              (new Ui::MainWidget),
@@ -18,8 +20,12 @@ MainWidget::MainWidget(QWidget* parent, Engine* engine) :
 
     // Initialise mine block widgets.
     for (int row = 0; row < m_row; row ++)
-        for (int col = 0; col < m_col; col ++)
-            ui->minezoneLayout->addWidget(new MineBlockWidget(NULL, (col + 1)*row), row, col);
+        for (int col = 0; col < m_col; col ++) {
+            MineBlockWidget* mbWidget = new MineBlockWidget(NULL, row*m_col + col+1);
+            ui->minezoneLayout->addWidget(mbWidget, row, col);
+            MainWidget::connect(mbWidget, &MineBlockWidget::clicked,
+                                this,     &MainWidget::on_mineBlockWidget_clicked);
+        }
 
     // Connect signals and slots.
     connect(m_engine, &Engine::timeout, this, &MainWidget::on_timeout);
@@ -62,4 +68,9 @@ void MainWidget::on_startBtn_clicked()
 void MainWidget::on_timeout()
 {
     ui->timerWidget->display(m_engine->time());
+}
+
+void MainWidget::on_mineBlockWidget_clicked(int id, Qt::MouseButton btn)
+{
+    std::cout << btn << " " << id << std::endl;
 }
