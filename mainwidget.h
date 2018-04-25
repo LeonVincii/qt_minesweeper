@@ -21,9 +21,6 @@ public:
     explicit MainWidget(QWidget* parent = 0, Engine* engine = NULL);
     ~MainWidget();
 
-protected:
-    void resizeEvent(QResizeEvent* event);
-
 private:
     /* ****************************************************************************************
      * Member Functions

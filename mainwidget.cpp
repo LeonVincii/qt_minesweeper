@@ -37,17 +37,6 @@ MainWidget::~MainWidget()
     delete m_engine;
 }
 
-void MainWidget::resizeEvent(QResizeEvent* event)
-{
-    int mb_width  = ui->minezoneLayout->itemAtPosition(0, 0)->widget()->width();
-    int mb_height = ui->minezoneLayout->itemAtPosition(0, 0)->widget()->height();
-    int margin = ui->minezoneLayout->margin();
-
-    QWidget::resize(QSize(2*margin + m_row*mb_width, 2*margin + m_row*mb_height));
-
-    QWidget::resizeEvent(event);
-}
-
 void MainWidget::reveal()
 {
 
@@ -72,5 +61,8 @@ void MainWidget::on_timeout()
 
 void MainWidget::on_mineBlockWidget_clicked(int id, Qt::MouseButton btn)
 {
-    std::cout << btn << " " << id << std::endl;
+    if (m_game_started)
+        std::cout << btn << " " << id << std::endl;
+    else
+        std::cout << "Game hasn't started yet!" << std::endl;
 }
