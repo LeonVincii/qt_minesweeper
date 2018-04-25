@@ -23,11 +23,6 @@ public:
 
 private:
     /* ****************************************************************************************
-     * Member Functions
-     * ****************************************************************************************/
-    void reveal();
-
-    /* ****************************************************************************************
      * Attributes
      * ****************************************************************************************/
     Ui::MainWidget*       ui;
@@ -36,12 +31,21 @@ private:
     int                   m_col;
     int                   m_row;
 
+    /* ****************************************************************************************
+     * Member Functions
+     * ****************************************************************************************/
+    void reveal(QVector<int> ids);
+    void mark  (int id);
+    void initMineBlockWidgets();
+
 private slots:
     void on_startBtn_clicked();
     void on_timeout();
 
 public slots:
+    void on_difficulty_changed(int col, int row);
     void on_mineBlockWidget_clicked(int id, Qt::MouseButton btn);
+    void on_mineZoneWidget_updated(Qt::MouseButton btn, QVector<int> ids);
 };
 
 #endif // MAINWIDGET_H

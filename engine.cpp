@@ -32,6 +32,34 @@ void Engine::restartGame()
     Engine::startGame();
 }
 
+void Engine::changeDifficulty(const Difficulty* difficulty)
+{
+    /*! \todo Connect to main widget and refresh minezone. */
+}
+
+void Engine::revealBlock(int id)
+{
+
+    QVector<int> ids = m_minezone->revealBlock(id);
+    emit updateMineZoneView(Qt::MouseButton::LeftButton, ids);
+}
+
+void Engine::markBlock(int id)
+{
+    m_minezone->markBlock(id);
+    emit updateMineZoneView(Qt::MouseButton::RightButton, QVector<int>({id}));
+}
+
+int Engine::valueAtId(int id) const
+{
+    /*! \todo Return value at block. */
+}
+
+int Engine::coord2Id(int x, int y)
+{
+    return (y*m_difficulty->width + x + 1);
+}
+
 void Engine::on_timeout()
 {
     m_time ++;

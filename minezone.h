@@ -34,8 +34,8 @@ public:
     /* ****************************************************************************************
      * Accessors & Mutators
      * ****************************************************************************************/
-    const Difficulty&   difficulty  () const   { return *m_difficulty;    }
-    const MineBlockArr& mineBlocks  () const   { return *m_mine_blocks;   }
+    const Difficulty&   difficulty  ()  const  { return *m_difficulty;    }
+    const MineBlockArr& mineBlocks  ()  const  { return *m_mine_blocks;   }
     int                 countdown   ()         { return  m_countdown;     }
     int                 flags       ()         { return  m_flag_countdown;}
 
@@ -44,12 +44,13 @@ public:
     /* ****************************************************************************************
      * Public Functions
      * ****************************************************************************************/
-    void displayDifficulty  ();
-    void initMines          ();
-    bool revealBlock        (int x, int y);
-    void markBlock          (int x, int y);
-    void drawBlocks         ();
-    void cheat_showMines    ();
+    void                displayDifficulty  ();
+    void                initMines          ();
+    QVector<int>        revealBlock        (int id);
+    int                 markBlock          (int id);
+    void                drawBlocks         ();
+    void                cheat_showMines    ();
+    const MineBlock&    mineBlockAt        (int id) const;
 
 private:
     /* ****************************************************************************************

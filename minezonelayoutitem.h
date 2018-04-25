@@ -1,46 +1,35 @@
-#ifndef MINEBLOCKWIDGET_H
-#define MINEBLOCKWIDGET_H
+#ifndef MINEZONELAYOUTITEM_H
+#define MINEZONELAYOUTITEM_H
 
-#include <QWidget>
-#include <QMouseEvent>
+#include <QLayoutItem>
 
-#include "engine.h"
+#include <mineblockwidget.h>
 
-namespace Ui {
-class MineBlockWidget;
-}
-
-class MineBlockWidget : public QWidget
+class MineZoneLayoutItem : public QLayoutItem
 {
     Q_OBJECT
-
 public:
     /* ****************************************************************************************
      * Constructor & Destructor
      * ****************************************************************************************/
-    explicit MineBlockWidget(QWidget* parent = 0, int id = 0);
-    ~MineBlockWidget();
+    explicit MineZoneLayoutItem(QLayoutItem*     parent   = nullptr,
+                                MineBlockWidget* mbWidget = nullptr);
+    ~MineZoneLayoutItem();
 
     /* ****************************************************************************************
      * Public Functions
      * ****************************************************************************************/
-    void reveal();
-    void mark  ();
-
-protected:
-    void mousePressEvent(QMouseEvent* event);
+    MineBlockWidget* getMBWidget()    const   { return m_mbWidget; }
 
 private:
     /* ****************************************************************************************
      * Attributes
      * ****************************************************************************************/
-    Ui::MineBlockWidget* ui;
-    int                  m_id;
-    int                  m_value;
-    bool                 m_marked;
+    MineBlockWidget*  m_mbWidget;
 
 signals:
-    void clicked(int id, Qt::MouseButton btn);
+
+public slots:
 };
 
-#endif // MINEBLOCKWIDGET_H
+#endif // MINEZONELAYOUTITEM_H

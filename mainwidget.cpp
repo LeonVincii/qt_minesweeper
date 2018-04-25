@@ -1,5 +1,6 @@
 #include "mainwidget.h"
 #include "ui_mainwidget.h"
+#include "minezonelayoutitem.h"
 
 #include <iostream>
 
@@ -19,16 +20,11 @@ MainWidget::MainWidget(QWidget* parent, Engine* engine) :
     ui->minezoneLayout->setVerticalSpacing(0);
 
     // Initialise mine block widgets.
-    for (int row = 0; row < m_row; row ++)
-        for (int col = 0; col < m_col; col ++) {
-            MineBlockWidget* mbWidget = new MineBlockWidget(NULL, row*m_col + col+1);
-            ui->minezoneLayout->addWidget(mbWidget, row, col);
-            MainWidget::connect(mbWidget, &MineBlockWidget::clicked,
-                                this,     &MainWidget::on_mineBlockWidget_clicked);
-        }
+    MainWidget::initMineBlockWidgets();
 
     // Connect signals and slots.
-    connect(m_engine, &Engine::timeout, this, &MainWidget::on_timeout);
+    connect(m_engine, &Engine::timeout,            this, &MainWidget::on_timeout);
+    connect(m_engine, &Engine::updateMineZoneView, this, &MainWidget::on_mineZoneWidget_updated);
 }
 
 MainWidget::~MainWidget()
@@ -37,9 +33,32 @@ MainWidget::~MainWidget()
     delete m_engine;
 }
 
-void MainWidget::reveal()
+void MainWidget::reveal(QVector<int> ids)
 {
+    MineZoneLayoutItem* mbWidgetItem;
+    for (int id : ids) {
+        mbWidgetItem = ui->minezoneLayout->itemAt(id - 1);
+        mbWidgetItem->getMBWidget()->reveal();
+    }
+}
 
+void MainWidget::mark(int id)
+{
+    MineZoneLayoutItem* mbWidgetItem = ui->minezoneLayout->itemAt(id - 1);
+    mbWidgetItem->getMBWidget()->mark();
+}
+
+void MainWidget::initMineBlockWidgets()
+{
+    for (int row = 0; row < m_row; row ++)
+        for (int col = 0; col < m_col; col ++) {
+            MineBlockWidget* mbWidget = new MineBlockWidget(this, row*m_col + col+1);
+            MineZoneLayoutItem* mbWidgetItem = new MineZoneLayoutItem(NULL, mbWidget);
+            ui->minezoneLayout->addItem(mbWidgetItem, row, col);
+            // Connect mine block widget signals to main widget.
+            MainWidget::connect(mbWidget, &MineBlockWidget::clicked,
+                                this,     &MainWidget::on_mineBlockWidget_clicked);
+        }
 }
 
 void MainWidget::on_startBtn_clicked()
@@ -59,10 +78,33 @@ void MainWidget::on_timeout()
     ui->timerWidget->display(m_engine->time());
 }
 
+void MainWidget::on_difficulty_changed(int col, int row)
+{
+    m_col = col;
+    m_row = row;
+
+    /*! \todo Need to reinitialise the layout and also handle the signal connections. */
+}
+
 void MainWidget::on_mineBlockWidget_clicked(int id, Qt::MouseButton btn)
 {
-    if (m_game_started)
-        std::cout << btn << " " << id << std::endl;
+    if (m_game_started) {
+        if (btn == Qt::MouseButton::LeftButton)
+            m_engine->revealBlock(id);
+        else
+            m_engine->markBlock(id);
+    }
     else
         std::cout << "Game hasn't started yet!" << std::endl;
+}
+
+void MainWidget::on_mineZoneWidget_updated(Qt::MouseButton btn, QVector<int> ids)
+{
+    if (ids.first() == 0) return;
+    else if (ids.first() == -1) return; /*! \todo Pop up game over window. */
+    else {
+        if (btn == Qt::MouseButton::LeftButton)
+            MainWidget::reveal(ids);
+        else MainWidget::mark(ids.first());
+    }
 }

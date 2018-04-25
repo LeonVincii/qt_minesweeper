@@ -29,6 +29,10 @@ public:
      * ****************************************************************************************/
     void startGame  ();
     void restartGame();
+    void changeDifficulty(const Difficulty* difficulty);
+    void revealBlock(int id);
+    void markBlock  (int id);
+    int  valueAtId  (int id) const;
 
 private:
     /* ****************************************************************************************
@@ -39,8 +43,14 @@ private:
     QTimer*             m_timer;
     int                 m_time;
 
+    /* ****************************************************************************************
+     * Member Functions
+     * ****************************************************************************************/
+    int coord2Id(int x, int y);
+
 signals:
-    void timeout    ();
+    void timeout            ();
+    void updateMineZoneView (Qt::MouseButton btn, QVector<int> ids);
 
 private slots:
     void on_timeout ();

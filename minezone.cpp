@@ -37,7 +37,7 @@ void MineZone::displayDifficulty()
     std::cout << "MINEZONE >> Current mine zone is set to the difficulty of: "
               << m_difficulty->difficulty << std::endl;
     std::cout << "         >> Dimension: "
-              << m_difficulty->width << " × " << m_difficulty->height << std::endl;
+              << m_difficulty->width << " x " << m_difficulty->height << std::endl;
     std::cout << "         >> Number of mines: "
               << m_difficulty->num_of_mines << std::endl;
 }
@@ -159,16 +159,15 @@ void MineZone::initMines()
     }
 }
 
-bool MineZone::revealBlock(int x, int y)
+QVector<int> MineZone::revealBlock(int id)
 {
     std::queue<MineBlock*> q;
     int                    dimen = m_difficulty->width * m_difficulty->height;
-    std::vector<bool>      p     = std::vector<bool>(dimen);
-    int                    index = (y - 1) * m_difficulty->width + x - 1;
-    MineBlock*             root  = (*m_mine_blocks)[index];
+    std::vector<bool>      p(dimen);
+    MineBlock*             root  = (*m_mine_blocks)[id - 1];
 
-    if (root->state() == REVEALED)  return true;
-    if (root->isMine())             return false;
+    if (root->state() == REVEALED)  return QVector<int>({ 0});
+    if (root->isMine())             return QVector<int>({-1});
 
     q.push(root);
     while (!q.empty()) {
@@ -189,17 +188,23 @@ bool MineZone::revealBlock(int x, int y)
         p[block->id() - 1] = true;
         q.pop();
     }
-    return true;
+
+    QVector<int> revealedBlockIds(0);
+    for (int index = 0; index < p.size(); index ++)
+        if (p[index]) revealedBlockIds.append(index + 1);
+
+    return revealedBlockIds;
 }
 
-void MineZone::markBlock(int x, int y)
+int MineZone::markBlock(int id)
 {
-    int         index = (y - 1) * m_difficulty->width + x - 1;
-    MineBlock*  block = (*m_mine_blocks)[index];
+    MineBlock*  block = (*m_mine_blocks)[id - 1];
     int         mark  = block->mark();
 
     m_countdown      += mark;
     m_flag_countdown  += mark;
+
+    return id;
 }
 
 void MineZone::drawBlocks()
@@ -233,4 +238,9 @@ void MineZone::cheat_showMines() // for dev purpose, will delete later
             std::cout << " " << i ++ << std::endl;
     }
     std::cout << std::endl;
+}
+
+const MineBlock& MineZone::mineBlockAt(int id) const
+{
+     return *(*m_mine_blocks)[id - 1];
 }
