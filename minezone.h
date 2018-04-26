@@ -1,9 +1,13 @@
 #ifndef MINEZONE_H
 #define MINEZONE_H
 
+#include <memory>
+
 #include <QObject>
 #include <QVector>
 #include <QTimer>
+
+#include "mineblock.h"
 
 struct Difficulty {
     std::string difficulty;
@@ -15,8 +19,6 @@ struct Difficulty {
 const Difficulty EASY   = { "easy"  ,  9,  9, 10 };
 const Difficulty NORMAL = { "normal", 16, 16, 40 };
 const Difficulty HARD   = { "hard"  , 16, 30, 99 };
-
-class MineBlock;
 
 class MineZone : public QObject
 {
@@ -39,18 +41,18 @@ public:
     int                 countdown   ()         { return  m_countdown;     }
     int                 flags       ()         { return  m_flag_countdown;}
 
-    void setDifficulty      (const Difficulty* difficulty);
+    void setDifficulty              (const Difficulty* difficulty);
 
     /* ****************************************************************************************
      * Public Functions
      * ****************************************************************************************/
-    void                displayDifficulty  ();
-    void                initMines          ();
-    QVector<int>        revealBlock        (int id);
-    int                 markBlock          (int id);
-    void                drawBlocks         ();
-    void                cheat_showMines    ();
-    const MineBlock&    mineBlockAt        (int id) const;
+    void                          displayDifficulty  ()       const;
+    void                          initMines          ();
+    QVector<int>                  revealBlock        (int id);
+    int                           markBlock          (int id);
+    void                          drawBlocks         ();
+    void                          cheat_showMines    ();
+    std::shared_ptr<MineBlock>    mineBlockAt        (int id) const;
 
 private:
     /* ****************************************************************************************

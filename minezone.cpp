@@ -6,7 +6,6 @@
 #include <QtAlgorithms>
 
 #include "minezone.h"
-#include "mineblock.h"
 
 MineZone::MineZone(QObject *parent, const Difficulty* difficulty) :
     QObject         (parent),
@@ -32,7 +31,7 @@ MineZone::~MineZone()
     delete m_mine_blocks;
 }
 
-void MineZone::displayDifficulty()
+void MineZone::displayDifficulty() const
 {
     std::cout << "MINEZONE >> Current mine zone is set to the difficulty of: "
               << m_difficulty->difficulty << std::endl;
@@ -240,7 +239,7 @@ void MineZone::cheat_showMines() // for dev purpose, will delete later
     std::cout << std::endl;
 }
 
-const MineBlock& MineZone::mineBlockAt(int id) const
+std::shared_ptr<MineBlock> MineZone::mineBlockAt(int id) const
 {
-     return *(*m_mine_blocks)[id - 1];
+     return std::make_shared<MineBlock>((*m_mine_blocks)[id - 1]);
 }

@@ -23,7 +23,7 @@ void MineBlockWidget::reveal()
     ui->mbFrame->setFrameShadow     (QFrame::Shadow::Plain);
     ui->mbFrame->setLineWidth       (1);
     ui->mbFrame->setMidLineWidth    (1);
-    ui->mbValueWidget->setText      (m_value);
+    ui->mbValueWidget->setText      (QString::number(m_value));
     ui->mbValueWidget->setVisible   (true);
 }
 
@@ -37,7 +37,7 @@ void MineBlockWidget::mark()
     else {
         m_marked = false;
         ui->mbValueWidget->setVisible   (false);
-        ui->mbValueWidget->setText      (m_value);
+        ui->mbValueWidget->setText      (QString::number(m_value));
     }
 }
 

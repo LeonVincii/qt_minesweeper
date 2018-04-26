@@ -33,16 +33,14 @@ SOURCES += \
     minezone.cpp \
     mainwidget.cpp \
     engine.cpp \
-    mineblockwidget.cpp \
-    minezonelayoutitem.cpp
+    mineblockwidget.cpp
 
 HEADERS += \
     mineblock.h \
     minezone.h \
     mainwidget.h \
     engine.h \
-    mineblockwidget.h \
-    minezonelayoutitem.h
+    mineblockwidget.h
 
 FORMS += \
     mainwidget.ui \

@@ -1,6 +1,5 @@
 #include "mainwidget.h"
 #include "ui_mainwidget.h"
-#include "minezonelayoutitem.h"
 
 #include <iostream>
 
@@ -35,26 +34,28 @@ MainWidget::~MainWidget()
 
 void MainWidget::reveal(QVector<int> ids)
 {
-    MineZoneLayoutItem* mbWidgetItem;
+    MineBlockWidget* mbWidget;
     for (int id : ids) {
-        mbWidgetItem = ui->minezoneLayout->itemAt(id - 1);
-        mbWidgetItem->getMBWidget()->reveal();
+        mbWidget = dynamic_cast<MineBlockWidget*>(ui->minezoneLayout->itemAt(id - 1));
+        if (mbWidget != nullptr)
+            mbWidget->reveal();
     }
 }
 
 void MainWidget::mark(int id)
 {
-    MineZoneLayoutItem* mbWidgetItem = ui->minezoneLayout->itemAt(id - 1);
-    mbWidgetItem->getMBWidget()->mark();
+    MineBlockWidget* mbWidget =
+            dynamic_cast<MineBlockWidget*>(ui->minezoneLayout->itemAt(id - 1));
+    mbWidget->mark();
 }
 
 void MainWidget::initMineBlockWidgets()
 {
     for (int row = 0; row < m_row; row ++)
         for (int col = 0; col < m_col; col ++) {
-            MineBlockWidget* mbWidget = new MineBlockWidget(this, row*m_col + col+1);
-            MineZoneLayoutItem* mbWidgetItem = new MineZoneLayoutItem(NULL, mbWidget);
-            ui->minezoneLayout->addItem(mbWidgetItem, row, col);
+            int id = row*m_col + col + 1;
+            MineBlockWidget* mbWidget = new MineBlockWidget(this, id, m_engine->valueAtId(id));
+            ui->minezoneLayout->addWidget(mbWidget, row, col);
             // Connect mine block widget signals to main widget.
             MainWidget::connect(mbWidget, &MineBlockWidget::clicked,
                                 this,     &MainWidget::on_mineBlockWidget_clicked);
