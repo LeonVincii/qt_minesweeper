@@ -42,7 +42,7 @@ void MineBlock::setValue()
     if (m_is_mine) m_value = 99;
     else
         for (MineBlock* neighbor : m_neighbors)
-            m_value += (neighbor == NULL) ? 0 : neighbor->isMine();
+            m_value += (neighbor == nullptr) ? 0 : neighbor->isMine();
 }
 
 int MineBlock::reveal()

@@ -1,3 +1,7 @@
+QLabel {
+    font-family: "FontAwesome";
+}
+
 QPushButton {
     font-family: "FontAwesome";
 }

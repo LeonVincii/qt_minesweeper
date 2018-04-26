@@ -14,11 +14,13 @@ class MainWidget : public QWidget
 {   
     Q_OBJECT
 
+    typedef QVector<MineBlockWidget*> MineBlockWidgetArr;
+
 public:
     /* ****************************************************************************************
      * Constructor & Destructor
      * ****************************************************************************************/
-    explicit MainWidget(QWidget* parent = 0, Engine* engine = NULL);
+    explicit MainWidget(QWidget* parent = 0, Engine* engine = nullptr);
     ~MainWidget();
 
 private:
@@ -30,6 +32,7 @@ private:
     bool                  m_game_started;
     int                   m_col;
     int                   m_row;
+    MineBlockWidgetArr*   m_mbWidgets;
 
     /* ****************************************************************************************
      * Member Functions

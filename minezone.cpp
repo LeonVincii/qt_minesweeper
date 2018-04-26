@@ -177,7 +177,7 @@ QVector<int> MineZone::revealBlock(int id)
         if (value == 0) {
             int neighbor_size = sizeof(*block->neighbors()) / sizeof(*block->neighbors())[0];
             for (int i = 0; i < neighbor_size; i ++) {
-                if ((*block->neighbors())[i] != NULL &&
+                if ((*block->neighbors())[i] != nullptr &&
                         !p[(*block->neighbors())[i]->id() - 1] &&
                         (*block->neighbors())[i]->state() == NONE) {
                     q.push((*block->neighbors())[i]);

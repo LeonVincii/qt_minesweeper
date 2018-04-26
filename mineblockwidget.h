@@ -26,6 +26,7 @@ public:
      * ****************************************************************************************/
     void reveal();
     void mark  ();
+    void reset ();
 
 protected:
     void mousePressEvent(QMouseEvent* event);

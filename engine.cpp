@@ -4,7 +4,7 @@
 
 Engine::Engine(QObject *parent) :
     QObject     (parent),
-    m_minezone  (new MineZone(NULL, &EASY)),
+    m_minezone  (new MineZone(nullptr, &EASY)),
     m_difficulty(&EASY),
     m_timer     (new QTimer(this)),
     m_time      (0)

@@ -46,6 +46,15 @@ void MineBlockWidget::mark()
     }
 }
 
+void MineBlockWidget::reset()
+{
+    ui->mbValueWidget->setVisible(false);
+    ui->mbFrame->setFrameShadow(QFrame::Shadow::Raised);
+    ui->mbFrame->setLineWidth(2);
+    ui->mbFrame->setMidLineWidth(2);
+    m_state = NONE;
+}
+
 void MineBlockWidget::mousePressEvent(QMouseEvent* event)
 {
     emit MineBlockWidget::clicked(m_id, event->button());

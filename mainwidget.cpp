@@ -9,7 +9,8 @@ MainWidget::MainWidget(QWidget* parent, Engine* engine) :
     m_engine        (engine),
     m_game_started  (false),
     m_col           (engine->col()),
-    m_row           (engine->row())
+    m_row           (engine->row()),
+    m_mbWidgets     (new MineBlockWidgetArr(m_col*m_row))
 {
     ui->setupUi(this);
 
@@ -34,19 +35,13 @@ MainWidget::~MainWidget()
 
 void MainWidget::reveal(QVector<int> ids)
 {
-    MineBlockWidget* mbWidget;
-    for (int id : ids) {
-        mbWidget = dynamic_cast<MineBlockWidget*>(ui->minezoneLayout->itemAt(id - 1)->widget());
-        if (mbWidget != nullptr)
-            mbWidget->reveal();
-    }
+    for (int id : ids)
+        (*m_mbWidgets)[id - 1]->reveal();
 }
 
 void MainWidget::mark(int id)
 {
-    MineBlockWidget* mbWidget =
-            dynamic_cast<MineBlockWidget*>(ui->minezoneLayout->itemAt(id - 1)->widget());
-    mbWidget->mark();
+    (*m_mbWidgets)[id - 1]->mark();
 }
 
 void MainWidget::initMineBlockWidgets()
@@ -54,11 +49,14 @@ void MainWidget::initMineBlockWidgets()
     for (int row = 0; row < m_row; row ++)
         for (int col = 0; col < m_col; col ++) {
             int id = row*m_col + col + 1;
-            MineBlockWidget* mbWidget = new MineBlockWidget(this, id, m_engine->valueAtId(id));
-            ui->minezoneLayout->addWidget(mbWidget, row, col);
+            if ((*m_mbWidgets)[id - 1] != nullptr) delete (*m_mbWidgets)[id - 1];
+            (*m_mbWidgets)[id - 1] = new MineBlockWidget(this, id, m_engine->valueAtId(id));
+            if (ui->minezoneLayout->itemAtPosition(row, col) != nullptr)
+                delete ui->minezoneLayout->itemAtPosition(row, col);
+            ui->minezoneLayout->addWidget((*m_mbWidgets)[id - 1], row, col);
             // Connect mine block widget signals to main widget.
-            MainWidget::connect(mbWidget, &MineBlockWidget::clicked,
-                                this,     &MainWidget::onMineBlockWidgetClicked);
+            MainWidget::connect((*m_mbWidgets)[id - 1], &MineBlockWidget::clicked,
+                                this,                   &MainWidget::onMineBlockWidgetClicked);
         }
 }
 
@@ -67,6 +65,7 @@ void MainWidget::on_startBtn_clicked()
     if (m_game_started) {
         m_engine->restartGame();
         ui->timerWidget->display(0);
+        MainWidget::initMineBlockWidgets();
     }
     else {
         m_engine->startGame();
@@ -89,14 +88,14 @@ void MainWidget::on_difficulty_changed(int col, int row)
 
 void MainWidget::onMineBlockWidgetClicked(int id, Qt::MouseButton btn)
 {
-    if (m_game_started) {
-        if (btn == Qt::MouseButton::LeftButton)
-            m_engine->revealBlock(id);
-        else
-            m_engine->markBlock(id);
+    if (!m_game_started) {
+        m_engine->startGame();
+        m_game_started = true;
     }
+    if (btn == Qt::MouseButton::LeftButton)
+        m_engine->revealBlock(id);
     else
-        std::cout << "Game hasn't started yet!" << std::endl;
+        m_engine->markBlock(id);
 }
 
 void MainWidget::on_mineZoneWidget_updated(Qt::MouseButton btn, QVector<int> ids)
