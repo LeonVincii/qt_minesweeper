@@ -44,7 +44,7 @@ private slots:
 
 public slots:
     void on_difficulty_changed(int col, int row);
-    void on_mineBlockWidget_clicked(int id, Qt::MouseButton btn);
+    void onMineBlockWidgetClicked(int id, Qt::MouseButton btn);
     void on_mineZoneWidget_updated(Qt::MouseButton btn, QVector<int> ids);
 };
 

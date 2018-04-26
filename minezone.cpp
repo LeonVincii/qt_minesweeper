@@ -21,6 +21,7 @@ MineZone::MineZone(QObject *parent, const Difficulty* difficulty) :
     for (int i = 0; i < m_mine_blocks->size(); i ++) {
         (*m_mine_blocks)[i] = new MineBlock(nullptr, i + 1);
     }
+    MineZone::initMines();
     std::cout << "         >> Mine zone initialized successfully" << std::endl;
     MineZone::displayDifficulty();
 }
@@ -221,25 +222,7 @@ void MineZone::drawBlocks()
     std::cout << std::endl;
 }
 
-void MineZone::cheat_showMines() // for dev purpose, will delete later
+const MineBlock* MineZone::mineBlockAt(int id) const
 {
-    std::cout << std::endl;
-    for (int i = 1; i <= m_difficulty->width; i ++)
-        std::cout << " " << i % 10 << " ";
-    std::cout << std::endl;
-    int i = 1;
-    for (MineBlock* block : *m_mine_blocks) {
-        std::cout << "[";
-        if (block->isMine()) std::cout << "X";
-        else std::cout << block->value();
-        std::cout << "]";
-        if (block->id() % m_difficulty->width == 0)
-            std::cout << " " << i ++ << std::endl;
-    }
-    std::cout << std::endl;
-}
-
-std::shared_ptr<MineBlock> MineZone::mineBlockAt(int id) const
-{
-     return std::make_shared<MineBlock>((*m_mine_blocks)[id - 1]);
+    return (*m_mine_blocks)[id - 1];
 }

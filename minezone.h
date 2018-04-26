@@ -46,13 +46,12 @@ public:
     /* ****************************************************************************************
      * Public Functions
      * ****************************************************************************************/
-    void                          displayDifficulty  ()       const;
-    void                          initMines          ();
-    QVector<int>                  revealBlock        (int id);
-    int                           markBlock          (int id);
-    void                          drawBlocks         ();
-    void                          cheat_showMines    ();
-    std::shared_ptr<MineBlock>    mineBlockAt        (int id) const;
+    void                displayDifficulty  ()       const;
+    void                initMines          ();
+    QVector<int>        revealBlock        (int id);
+    int                 markBlock          (int id);
+    void                drawBlocks         ();
+    const MineBlock*    mineBlockAt        (int id) const;
 
 private:
     /* ****************************************************************************************

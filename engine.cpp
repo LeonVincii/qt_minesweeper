@@ -20,7 +20,6 @@ Engine::~Engine()
 
 void Engine::startGame()
 {
-    m_minezone->initMines();
     m_timer->start(1000);
 }
 
@@ -52,9 +51,8 @@ void Engine::markBlock(int id)
 
 int Engine::valueAtId(int id) const
 {
-    /*! \todo Return value at block. */
-    std::shared_ptr<MineBlock> mb = m_minezone->mineBlockAt(id);
-    return mb.get()->value();
+    const MineBlock* mb = m_minezone->mineBlockAt(id);
+    return mb->value();
 }
 
 int Engine::coord2Id(int x, int y)

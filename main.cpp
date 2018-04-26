@@ -19,8 +19,8 @@ int main(int argc, char *argv[])
     minesweeper.setStyleSheet(styleSheet);
 
     Engine*      engine = new Engine();
-    MainWidget   main_window(NULL, engine);
-    main_window.setWindowTitle("MineSweeper by LeonVincii");
-    main_window.show();
+    MainWidget   mainWindow(NULL, engine);
+    mainWindow.setWindowTitle("MineSweeper by LeonVincii");
+    mainWindow.show();
     return minesweeper.exec();
 }

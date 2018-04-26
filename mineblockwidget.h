@@ -37,7 +37,7 @@ private:
     Ui::MineBlockWidget* ui;
     int                  m_id;
     int                  m_value;
-    bool                 m_marked;
+    BlockState           m_state;
 
 signals:
     void clicked(int id, Qt::MouseButton btn);

@@ -19,10 +19,10 @@ public:
     /* ****************************************************************************************
      * Accessors & Mutators
      * ****************************************************************************************/
-    int         id       ()  { return m_id;        }
-    int         value    ()  { return m_value;     }
-    bool        isMine   ()  { return m_is_mine;   }
-    BlockState  state    ()  { return m_state;     }
+    int         id       () const  { return m_id;        }
+    int         value    () const  { return m_value;     }
+    bool        isMine   () const  { return m_is_mine;   }
+    BlockState  state    () const  { return m_state;     }
 
     typedef     MineBlock*   (*Neighbors)[8];
     Neighbors   neighbors()  { return &m_neighbors; }

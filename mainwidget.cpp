@@ -1,7 +1,7 @@
+#include <iostream>
+
 #include "mainwidget.h"
 #include "ui_mainwidget.h"
-
-#include <iostream>
 
 MainWidget::MainWidget(QWidget* parent, Engine* engine) :
     QWidget         (parent),
@@ -36,7 +36,7 @@ void MainWidget::reveal(QVector<int> ids)
 {
     MineBlockWidget* mbWidget;
     for (int id : ids) {
-        mbWidget = dynamic_cast<MineBlockWidget*>(ui->minezoneLayout->itemAt(id - 1));
+        mbWidget = dynamic_cast<MineBlockWidget*>(ui->minezoneLayout->itemAt(id - 1)->widget());
         if (mbWidget != nullptr)
             mbWidget->reveal();
     }
@@ -45,7 +45,7 @@ void MainWidget::reveal(QVector<int> ids)
 void MainWidget::mark(int id)
 {
     MineBlockWidget* mbWidget =
-            dynamic_cast<MineBlockWidget*>(ui->minezoneLayout->itemAt(id - 1));
+            dynamic_cast<MineBlockWidget*>(ui->minezoneLayout->itemAt(id - 1)->widget());
     mbWidget->mark();
 }
 
@@ -58,7 +58,7 @@ void MainWidget::initMineBlockWidgets()
             ui->minezoneLayout->addWidget(mbWidget, row, col);
             // Connect mine block widget signals to main widget.
             MainWidget::connect(mbWidget, &MineBlockWidget::clicked,
-                                this,     &MainWidget::on_mineBlockWidget_clicked);
+                                this,     &MainWidget::onMineBlockWidgetClicked);
         }
 }
 
@@ -87,7 +87,7 @@ void MainWidget::on_difficulty_changed(int col, int row)
     /*! \todo Need to reinitialise the layout and also handle the signal connections. */
 }
 
-void MainWidget::on_mineBlockWidget_clicked(int id, Qt::MouseButton btn)
+void MainWidget::onMineBlockWidgetClicked(int id, Qt::MouseButton btn)
 {
     if (m_game_started) {
         if (btn == Qt::MouseButton::LeftButton)
