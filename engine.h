@@ -20,19 +20,21 @@ public:
     /* ****************************************************************************************
      * Accessors & Mutators
      * ****************************************************************************************/
-    int time() const { return m_time; }
-    int row () const { return m_difficulty->height; }
-    int col () const { return m_difficulty->width;  }
+    int time      () const { return m_time;                     }
+    int row       () const { return m_difficulty->height;       }
+    int col       () const { return m_difficulty->width;        }
+    int numOfMines() const { return m_difficulty->num_of_mines; }
 
     /* ****************************************************************************************
      * Public Functions
      * ****************************************************************************************/
-    void startGame  ();
-    void restartGame();
+    void startGame       ();
+    void restartGame     ();
     void changeDifficulty(const Difficulty* difficulty);
-    void revealBlock(int id);
-    void markBlock  (int id);
-    int  valueAtId  (int id) const;
+    void revealBlock     (int id);
+    void markBlock       (int id);
+    int  valueAtId       (int id) const;
+    int  flagsLeft       ()       const { return m_minezone->flags(); }
 
 private:
     /* ****************************************************************************************

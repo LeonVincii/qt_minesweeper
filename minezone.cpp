@@ -198,12 +198,11 @@ QVector<int> MineZone::revealBlock(int id)
 
 int MineZone::markBlock(int id)
 {
-    MineBlock*  block = (*m_mine_blocks)[id - 1];
-    int         mark  = block->mark();
-
+    MineBlock* block = (*m_mine_blocks)[id - 1];
+    if (block->state() == NONE && m_flag_countdown == 0) return 0;
+    int mark = block->mark();
     m_countdown      += mark;
-    m_flag_countdown  += mark;
-
+    m_flag_countdown += mark;
     return id;
 }
 

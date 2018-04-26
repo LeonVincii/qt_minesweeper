@@ -45,8 +45,8 @@ void Engine::revealBlock(int id)
 
 void Engine::markBlock(int id)
 {
-    m_minezone->markBlock(id);
-    emit updateMineZoneView(Qt::MouseButton::RightButton, QVector<int>({id}));
+    int mark = m_minezone->markBlock(id);
+    emit updateMineZoneView(Qt::MouseButton::RightButton, QVector<int>({mark}));
 }
 
 int Engine::valueAtId(int id) const

@@ -58,6 +58,7 @@ void MainWidget::initMineBlockWidgets()
             MainWidget::connect((*m_mbWidgets)[id - 1], &MineBlockWidget::clicked,
                                 this,                   &MainWidget::onMineBlockWidgetClicked);
         }
+    ui->flagNumberWidget->display(m_engine->numOfMines());
 }
 
 void MainWidget::on_startBtn_clicked()
@@ -108,6 +109,11 @@ void MainWidget::on_mineZoneWidget_updated(Qt::MouseButton btn, QVector<int> ids
     else {
         if (btn == Qt::MouseButton::LeftButton)
             MainWidget::reveal(ids);
-        else MainWidget::mark(ids.first());
+        else {
+            if (ids.first() != 0) {
+                MainWidget::mark(ids.first());
+                ui->flagNumberWidget->display(m_engine->flagsLeft());
+            }
+        }
     }
 }
