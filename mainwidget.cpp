@@ -102,7 +102,10 @@ void MainWidget::onMineBlockWidgetClicked(int id, Qt::MouseButton btn)
 void MainWidget::on_mineZoneWidget_updated(Qt::MouseButton btn, QVector<int> ids)
 {
     if (ids.first() == 0) return;
-    else if (ids.first() == -1) return; /*! \todo Pop up game over window. */
+    else if (ids.first() == -1) {
+        /*! \todo Pop up game over window. */
+        return;
+    }
     else {
         if (btn == Qt::MouseButton::LeftButton)
             MainWidget::reveal(ids);
