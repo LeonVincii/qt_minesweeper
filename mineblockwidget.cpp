@@ -29,6 +29,7 @@ void MineBlockWidget::reveal()
         ui->mbFrame->setStyleSheet  ("background: #e2e2e2");
         if (m_value != 0) {
             ui->mbValueWidget->setText      (QString::number(m_value));
+            ui->mbValueWidget->setStyleSheet(MineBlockWidget::colorFigure());
             ui->mbValueWidget->setVisible   (true);
         }
     }
@@ -39,7 +40,7 @@ void MineBlockWidget::mark()
     if (m_state == NONE) {
         m_state = MARKED;
         ui->mbValueWidget->setText      (QChar(0xf024));
-        ui->mbValueWidget->setStyleSheet("color: #bf0707;");
+        ui->mbValueWidget->setStyleSheet("color: #bf0707");
         ui->mbValueWidget->setVisible   (true);
     }
     else if (m_state == MARKED){
@@ -63,4 +64,19 @@ void MineBlockWidget::reset()
 void MineBlockWidget::mousePressEvent(QMouseEvent* event)
 {
     emit MineBlockWidget::clicked(m_id, event->button());
+}
+
+QString MineBlockWidget::colorFigure()
+{
+    switch (m_value) {
+    case 1: return "color: #05b71a";
+    case 2: return "color: #04b7ae";
+    case 3: return "color: #0674c9";
+    case 4: return "color: #c65509";
+    case 5: return "color: #c63b08";
+    case 6: return "color: #c40707";
+    case 7: return "color: #4906c4";
+    case 8: return "color: #15028c";
+    default: return "";
+    }
 }

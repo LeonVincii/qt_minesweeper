@@ -40,6 +40,11 @@ private:
     int                  m_value;
     BlockState           m_state;
 
+    /* ****************************************************************************************
+     * Member Functions
+     * ****************************************************************************************/
+    QString colorFigure();
+
 signals:
     void clicked(int id, Qt::MouseButton btn);
 };

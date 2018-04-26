@@ -57,6 +57,7 @@ int MineBlock::mark()
 {
     if      (m_state == NONE)    { m_state = MARKED; return -1; }
     else if (m_state == MARKED)  { m_state = NONE;   return  1; }
+    else    return 0;
 }
 
 void MineBlock::draw()
