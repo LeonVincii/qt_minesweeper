@@ -7,10 +7,11 @@ MainWidget::MainWidget(QWidget* parent, Engine* engine) :
     QWidget         (parent),
     ui              (new Ui::MainWidget),
     m_engine        (engine),
-    m_game_started  (false),
+    m_gameStarted   (false),
     m_col           (engine->col()),
     m_row           (engine->row()),
-    m_mbWidgets     (new MineBlockWidgetArr(m_col*m_row))
+    m_mbWidgets     (new MineBlockWidgetArr(m_col*m_row)),
+    m_gameStatus    (ACTIVE)
 {
     ui->setupUi(this);
 
@@ -25,6 +26,8 @@ MainWidget::MainWidget(QWidget* parent, Engine* engine) :
     // Connect signals and slots.
     connect(m_engine, &Engine::timeout,            this, &MainWidget::on_timeout);
     connect(m_engine, &Engine::updateMineZoneView, this, &MainWidget::on_mineZoneWidget_updated);
+    connect(m_engine, &Engine::win,                this, &MainWidget::on_win);
+    connect(m_engine, &Engine::gameOver,           this, &MainWidget::on_gameOver);
 }
 
 MainWidget::~MainWidget()
@@ -63,14 +66,16 @@ void MainWidget::initMineBlockWidgets()
 
 void MainWidget::on_startBtn_clicked()
 {
-    if (m_game_started) {
+    if (m_gameStatus != ACTIVE) m_gameStatus = ACTIVE;
+
+    if (m_gameStarted) {
         m_engine->restartGame();
         ui->timerWidget->display(0);
         MainWidget::initMineBlockWidgets();
     }
     else {
         m_engine->startGame();
-        m_game_started = true;
+        m_gameStarted = true;
     }
 }
 
@@ -89,14 +94,16 @@ void MainWidget::on_difficulty_changed(int col, int row)
 
 void MainWidget::onMineBlockWidgetClicked(int id, Qt::MouseButton btn)
 {
-    if (!m_game_started) {
-        m_engine->startGame();
-        m_game_started = true;
+    if (m_gameStatus == ACTIVE) {
+        if (!m_gameStarted) {
+            m_engine->startGame();
+            m_gameStarted = true;
+        }
+        if (btn == Qt::MouseButton::LeftButton)
+            m_engine->revealBlock(id);
+        else
+            m_engine->markBlock(id);
     }
-    if (btn == Qt::MouseButton::LeftButton)
-        m_engine->revealBlock(id);
-    else
-        m_engine->markBlock(id);
 }
 
 void MainWidget::on_mineZoneWidget_updated(Qt::MouseButton btn, QVector<int> ids)
@@ -116,4 +123,18 @@ void MainWidget::on_mineZoneWidget_updated(Qt::MouseButton btn, QVector<int> ids
             }
         }
     }
+}
+
+void MainWidget::on_win()
+{
+    m_gameStatus = FINISHED;
+
+    std::cout << "You win!" << std::endl;
+}
+
+void MainWidget::on_gameOver()
+{
+    m_gameStatus = FINISHED;
+
+    std::cout << "Game over." << std::endl;
 }

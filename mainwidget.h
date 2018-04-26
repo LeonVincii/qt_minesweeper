@@ -16,6 +16,8 @@ class MainWidget : public QWidget
 
     typedef QVector<MineBlockWidget*> MineBlockWidgetArr;
 
+    enum GameStatus { ACTIVE, FINISHED };
+
 public:
     /* ****************************************************************************************
      * Constructor & Destructor
@@ -29,10 +31,11 @@ private:
      * ****************************************************************************************/
     Ui::MainWidget*       ui;
     Engine*               m_engine;
-    bool                  m_game_started;
+    bool                  m_gameStarted;
     int                   m_col;
     int                   m_row;
     MineBlockWidgetArr*   m_mbWidgets;
+    GameStatus            m_gameStatus;
 
     /* ****************************************************************************************
      * Member Functions
@@ -49,6 +52,8 @@ public slots:
     void on_difficulty_changed(int col, int row);
     void onMineBlockWidgetClicked(int id, Qt::MouseButton btn);
     void on_mineZoneWidget_updated(Qt::MouseButton btn, QVector<int> ids);
+    void on_win();
+    void on_gameOver();
 };
 
 #endif // MAINWIDGET_H

@@ -53,6 +53,8 @@ private:
 signals:
     void timeout            ();
     void updateMineZoneView (Qt::MouseButton btn, QVector<int> ids);
+    void win                ();
+    void gameOver           ();
 
 private slots:
     void on_timeout ();

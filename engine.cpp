@@ -40,13 +40,29 @@ void Engine::revealBlock(int id)
 {
 
     QVector<int> ids = m_minezone->revealBlock(id);
-    emit updateMineZoneView(Qt::MouseButton::LeftButton, ids);
+    if (ids.first() == -1) {
+        m_timer->stop();
+        emit gameOver();
+    }
+    else {
+        if (m_minezone->countdown() == 0) {
+            m_timer->stop();
+            emit win();
+        }
+        else
+            emit updateMineZoneView(Qt::MouseButton::LeftButton, ids);
+    }
 }
 
 void Engine::markBlock(int id)
 {
     int mark = m_minezone->markBlock(id);
-    emit updateMineZoneView(Qt::MouseButton::RightButton, QVector<int>({mark}));
+    if (m_minezone->countdown() == 0) {
+        m_timer->stop();
+        emit win();
+    }
+    else
+        emit updateMineZoneView(Qt::MouseButton::RightButton, QVector<int>({mark}));
 }
 
 int Engine::valueAtId(int id) const

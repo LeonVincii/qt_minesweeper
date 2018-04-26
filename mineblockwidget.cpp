@@ -22,9 +22,11 @@ void MineBlockWidget::reveal()
 {
     if (m_state == NONE) {
         m_state = REVEALED;
-        ui->mbFrame->setFrameShadow     (QFrame::Shadow::Plain);
-        ui->mbFrame->setLineWidth       (1);
-        ui->mbFrame->setMidLineWidth    (1);
+        ui->mbFrame->setFrameStyle  (QFrame::Box);
+        ui->mbFrame->setFrameShadow (QFrame::Shadow::Sunken);
+        ui->mbFrame->setLineWidth   (1);
+        ui->mbFrame->setMidLineWidth(0);
+        ui->mbFrame->setStyleSheet  ("background: #e2e2e2");
         if (m_value != 0) {
             ui->mbValueWidget->setText      (QString::number(m_value));
             ui->mbValueWidget->setVisible   (true);
@@ -37,11 +39,13 @@ void MineBlockWidget::mark()
     if (m_state == NONE) {
         m_state = MARKED;
         ui->mbValueWidget->setText      (QChar(0xf024));
+        ui->mbValueWidget->setStyleSheet("color: #bf0707;");
         ui->mbValueWidget->setVisible   (true);
     }
     else if (m_state == MARKED){
         m_state = NONE;
         ui->mbValueWidget->setVisible   (false);
+        ui->mbValueWidget->setStyleSheet("");
         ui->mbValueWidget->setText      (QString::number(m_value));
     }
 }
@@ -49,9 +53,10 @@ void MineBlockWidget::mark()
 void MineBlockWidget::reset()
 {
     ui->mbValueWidget->setVisible(false);
-    ui->mbFrame->setFrameShadow(QFrame::Shadow::Raised);
-    ui->mbFrame->setLineWidth(2);
+    ui->mbFrame->setFrameShadow (QFrame::Shadow::Raised);
+    ui->mbFrame->setLineWidth   (2);
     ui->mbFrame->setMidLineWidth(2);
+    ui->mbFrame->setStyleSheet  ("");
     m_state = NONE;
 }
 
