@@ -1,4 +1,5 @@
-#include <iostream>
+#include <QMenu>
+#include <QMenuBar>
 
 #include "mainwidget.h"
 #include "ui_mainwidget.h"
@@ -14,6 +15,16 @@ MainWidget::MainWidget(QWidget* parent, Engine* engine) :
     m_gameStatus    (ACTIVE)
 {
     ui->setupUi(this);
+
+    // Setup menu bar.
+    QMenuBar* menuBar   = new QMenuBar();
+    QMenu*    gameMenu  = menuBar->addMenu("Game");
+
+    gameMenu->addAction("Easy");
+    gameMenu->addAction("Normal");
+    gameMenu->addAction("Hard");
+
+    ui->menuLayout->setMenuBar(menuBar);
 
     ui->startBtn->setText(QChar(0xf118));
 
@@ -132,8 +143,6 @@ void MainWidget::on_win(Qt::MouseButton btn, QVector<int> ids)
     m_gameStatus = FINISHED;
 
     on_mineZoneWidget_updated(btn, ids);
-
-    std::cout << "You win!" << std::endl;
 }
 
 void MainWidget::on_gameOver()
@@ -144,6 +153,4 @@ void MainWidget::on_gameOver()
 
     for (MineBlockWidget* mbWidget : *m_mbWidgets)
         if (mbWidget->value() == 99) mbWidget->reveal();
-
-    std::cout << "Game over." << std::endl;
 }

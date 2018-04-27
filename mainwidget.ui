@@ -24,6 +24,9 @@
     <enum>QLayout::SetFixedSize</enum>
    </property>
    <item>
+    <layout class="QHBoxLayout" name="menuLayout"/>
+   </item>
+   <item>
     <layout class="QHBoxLayout" name="controllerLayout">
      <property name="sizeConstraint">
       <enum>QLayout::SetNoConstraint</enum>

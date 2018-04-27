@@ -30,7 +30,7 @@ public:
      * ****************************************************************************************/
     void startGame       ();
     void restartGame     ();
-    void changeDifficulty(const Difficulty* difficulty);
+    void setDifficulty   (const Difficulty* difficulty);
     void revealBlock     (int id);
     void markBlock       (int id);
     int  valueAtId       (int id) const;

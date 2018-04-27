@@ -31,7 +31,7 @@ void Engine::restartGame()
     Engine::startGame();
 }
 
-void Engine::changeDifficulty(const Difficulty* difficulty)
+void Engine::setDifficulty(const Difficulty* difficulty)
 {
     /*! \todo Connect to main widget and refresh minezone. */
 }
