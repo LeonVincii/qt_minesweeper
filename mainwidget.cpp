@@ -68,6 +68,8 @@ void MainWidget::on_startBtn_clicked()
 {
     if (m_gameStatus != ACTIVE) m_gameStatus = ACTIVE;
 
+    ui->startBtn->setText(QChar(0xf118));
+
     if (m_gameStarted) {
         m_engine->restartGame();
         ui->timerWidget->display(0);
@@ -125,9 +127,11 @@ void MainWidget::on_mineZoneWidget_updated(Qt::MouseButton btn, QVector<int> ids
     }
 }
 
-void MainWidget::on_win()
+void MainWidget::on_win(Qt::MouseButton btn, QVector<int> ids)
 {
     m_gameStatus = FINISHED;
+
+    on_mineZoneWidget_updated(btn, ids);
 
     std::cout << "You win!" << std::endl;
 }
@@ -135,6 +139,11 @@ void MainWidget::on_win()
 void MainWidget::on_gameOver()
 {
     m_gameStatus = FINISHED;
+
+    ui->startBtn->setText(QChar(0xf119));
+
+    for (MineBlockWidget* mbWidget : *m_mbWidgets)
+        if (mbWidget->value() == 99) mbWidget->reveal();
 
     std::cout << "Game over." << std::endl;
 }

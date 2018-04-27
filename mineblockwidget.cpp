@@ -27,9 +27,14 @@ void MineBlockWidget::reveal()
         ui->mbFrame->setLineWidth   (1);
         ui->mbFrame->setMidLineWidth(0);
         ui->mbFrame->setStyleSheet  ("background: #e2e2e2");
-        if (m_value != 0) {
+        if (m_value != 0 & m_value != 99) {
             ui->mbValueWidget->setText      (QString::number(m_value));
             ui->mbValueWidget->setStyleSheet(MineBlockWidget::colorFigure());
+            ui->mbValueWidget->setVisible   (true);
+        }
+        else if (m_value == 99) {
+            ui->mbValueWidget->setText      (QChar(0xf1e2));
+            ui->mbValueWidget->setStyleSheet("background: #ff3838");
             ui->mbValueWidget->setVisible   (true);
         }
     }

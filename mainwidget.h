@@ -52,7 +52,7 @@ public slots:
     void on_difficulty_changed(int col, int row);
     void onMineBlockWidgetClicked(int id, Qt::MouseButton btn);
     void on_mineZoneWidget_updated(Qt::MouseButton btn, QVector<int> ids);
-    void on_win();
+    void on_win(Qt::MouseButton btn, QVector<int> ids);
     void on_gameOver();
 };
 

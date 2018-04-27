@@ -47,7 +47,7 @@ void Engine::revealBlock(int id)
     else {
         if (m_minezone->countdown() == 0) {
             m_timer->stop();
-            emit win();
+            emit win(Qt::MouseButton::LeftButton, ids);
         }
         else
             emit updateMineZoneView(Qt::MouseButton::LeftButton, ids);
@@ -59,7 +59,7 @@ void Engine::markBlock(int id)
     int mark = m_minezone->markBlock(id);
     if (m_minezone->countdown() == 0) {
         m_timer->stop();
-        emit win();
+        emit win(Qt::MouseButton::RightButton, QVector<int>({mark}));
     }
     else
         emit updateMineZoneView(Qt::MouseButton::RightButton, QVector<int>({mark}));
